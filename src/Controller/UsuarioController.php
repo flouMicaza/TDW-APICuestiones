@@ -84,7 +84,7 @@ class UsuarioController
 
         $usuarios = $this->jwt->isAdmin
             ? Utils::getEntityManager()->getRepository(Usuario::class)
-                ->findAll()
+                ->findAll() //findall es de doctrine?
             : Utils::getEntityManager()->getRepository(Usuario::class)
                 ->findBy([ 'id' => $this->jwt->user_id ]);
 

@@ -79,13 +79,36 @@ class CuestionController
      */
     public function cget(Request $request, Response $response): Response
     {
-        if (0 === $this->jwt->user_id) {
+        //403 Forbidden
+        if (!$this->jwt->user_id) {
             return Error::error($this->container, $request, $response, StatusCode::HTTP_FORBIDDEN);
         }
 
-        // TODO
-        return Error::error($this->container, $request, $response, StatusCode::HTTP_NOT_IMPLEMENTED);
-    }
+        // si es admin le entrego todas las cuestiones, sino le entrego solo sus cuestiones. 
+        $cuestiones = $this->jwt->isAdmin 
+            ? Utils::getEntityManager()->getREpository(Cuestion::class)
+                ->findAll()
+            : Utils::getEntityManager()->getREpository(Cuestion::class)
+                ->findBy(['creador'=> $this->jwt->user_id ]);
+        
+        //404
+        if(0===count($cuestiones)){
+             return Error::error($this->container, $request, $response, StatusCode::HTTP_NOT_FOUND);
+        }
+        
+        $this->logger->info(
+            $request->getMethod() . ' ' . $request->getUri()->getPath(),
+            ['uid' => $this->jwt->user_id, 'status' => StatusCode::HTTP_OK ]
+        );
+
+        //200
+        return $response
+            ->withJson(['cuestiones'=>$cuestiones],
+            StatusCode::HTTP_OK);
+
+        //401 
+
+         }
 
     /**
      * Summary: Returns a question based on a single ID
