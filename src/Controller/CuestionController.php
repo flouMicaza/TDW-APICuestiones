@@ -152,13 +152,32 @@ class CuestionController
      */
     public function get(Request $request, Response $response, array $args): Response
     {
+        //403
         if (0 === $this->jwt->user_id) {
             return Error::error($this->container, $request, $response, StatusCode::HTTP_FORBIDDEN);
         }
 
-        // TODO
-        return Error::error($this->container, $request, $response, StatusCode::HTTP_NOT_IMPLEMENTED);
-    }
+        //Busca la cuestion con ese ID 
+        $cuestion =  Utils::getEntityManager()
+                        ->find(Usuario::class,$args['id']);
+        
+        //404 Si no encuentra ninguna con ese id.
+        if(null===$cuestion){
+            return Error::error($this->container,$request, $response, StatusCode::HTTP_NOT_FOUND);
+        }
+        
+        $this->logger->info(
+            $request->getMethod() . ' ' . $request->getUri()->getPath(),
+            [ 'uid' => $this->jwt->user_id, 'status' => StatusCode::HTTP_OK ]
+        );
+
+        //200 
+        return $response
+            ->withJson(
+                $cuestion,
+                StatusCode::HTTP_OK // 200
+            );
+        }
 
     /**
      * Summary: Deletes a question
