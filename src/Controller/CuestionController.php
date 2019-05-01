@@ -159,7 +159,7 @@ class CuestionController
 
         //Busca la cuestion con ese ID 
         $cuestion =  Utils::getEntityManager()
-                        ->find(Usuario::class,$args['id']);
+                        ->find(Cuestion::class,$args['id']);
         
         //404 Si no encuentra ninguna con ese id.
         if(null===$cuestion){
