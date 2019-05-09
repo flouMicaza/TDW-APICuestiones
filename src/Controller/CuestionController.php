@@ -106,8 +106,7 @@ class CuestionController
             ->withJson(['cuestiones'=>$cuestiones],
             StatusCode::HTTP_OK);
 
-        //401 
-
+        
          }
 
     /**
@@ -218,12 +217,33 @@ class CuestionController
      */
     public function delete(Request $request, Response $response, array $args): Response
     {
+        //Si no es maestro no puede acceder.
         if (!$this->jwt->isMaestro) { // 403
             return Error::error($this->container, $request, $response, StatusCode::HTTP_FORBIDDEN);
         }
 
-        // TODO
-        return Error::error($this->container, $request, $response, StatusCode::HTTP_NOT_IMPLEMENTED);
+        //Busco  la cuestion con ese id. 
+        $entity_manager = Utils::getEntityManager();
+        $cuestion =  $entity_manager
+                        ->find(Cuestion::class,$args['id']);
+        
+        //404 si no encuentra la cuestion
+        if(null===$cuestion){
+            return Error::error($this->container, $request, $response, StatusCode::HTTP_NOT_FOUND);
+        }
+
+        $this->logger->info(
+            $request->getMethod() . ' ' . $request->getUri()->getPath(),
+            [
+                'uid' => $this->jwt->user_id,
+                'status' => StatusCode::HTTP_NO_CONTENT
+            ]
+        );
+        $entity_manager->remove($cuestion);
+        $entity_manager->flush();
+        
+        //la cuestion no existe
+        return $response->withStatus(StatusCode::HTTP_NO_CONTENT);  // 204
     }
 
     /**
@@ -334,21 +354,57 @@ class CuestionController
      *                   "code"      = 409,
      *                   "message"   = "`Conflict`: the creator does not exist or is not a teacher."
      *              }
-     *         )
-     *     )
-     * )
+     *         ),
+
      * @param Request $request
      * @param Response $response
      * @return Response
      */
     public function post(Request $request, Response $response): Response
     {
+
         if (!$this->jwt->isMaestro) {
+            
             return Error::error($this->container, $request, $response, StatusCode::HTTP_FORBIDDEN);
         }
 
-        // TODO
-        return Error::error($this->container, $request, $response, StatusCode::HTTP_NOT_IMPLEMENTED);
+        $req_data = $request ->getParsedBody() ?? json_decode($request->getBody(),true);
+        $entity_manager = Utils::getEntityManager();
+          
+        if($req_data['creador']!==null){
+          
+            $usuario = $entity_manager->
+            getRepository(Usuario::class)->
+            findOneBy(['id' => $req_data['creador']]);
+            if($usuario===null || !$usuario->isMaestro()){
+            return Error::error($this->container, $request, $response, StatusCode::HTTP_CONFLICT);
+        }
+        }
+        //compruebo que sea maestro, si no es maestro el usuario entonces lanzo un error 409 o si no existe. 
+        
+         //201
+        
+        
+        $cuestion = new Cuestion(
+            $req_data['enunciadoDescripcion'],
+            $usuario,
+            $req_data['enunciadoDisponible']
+        );
+
+        //si se crea abierta entonces la abro. 
+        if($req_data['estado']==="abierta"){
+            $cuestion->abrirCuestion();
+        }
+
+        $entity_manager -> persist($cuestion);
+        $entity_manager->flush();
+        $this->logger->info(
+            $request->getMethod() . ' ' . $request->getUri()->getPath(),
+            [ 'uid' => $this->jwt->user_id, 'status' => StatusCode::HTTP_CREATED ]
+        );
+
+        return $response->withJson($cuestion, StatusCode::HTTP_CREATED); // 201
+        
     }
 
     /**
@@ -373,6 +429,17 @@ class CuestionController
      *     security    = {
      *          { "TDWApiSecurity": {} }
      *     },
+     *     @OA\Response(
+     *          response    = 400,
+     *          description = "`Bad Request`:estado inválido",
+     *          @OA\JsonContent(
+     *              ref ="#/components/schemas/Message",
+     *              example = {
+     *                  "code"    = 400,
+     *                  "message" = "`Bad Request`: estado inválido"
+     *              }
+     *         )
+     *     ),
      *     @OA\Response(
      *          response    = 209,
      *          description = "`Content Returned`: question previously existed and is now updated",
@@ -414,8 +481,59 @@ class CuestionController
         if (!$this->jwt->isMaestro) { // 403
             return Error::error($this->container, $request, $response, StatusCode::HTTP_FORBIDDEN);
         }
+        $req_data
+            = $request->getParsedBody()
+            ?? json_decode($request->getBody(), true);
+        
+        // recuperar el usuario
+        $entity_manager = Utils::getEntityManager();
 
-        // TODO
-        return Error::error($this->container, $request, $response, StatusCode::HTTP_NOT_IMPLEMENTED);
+        /** @var Cuestion $cuestion */
+        $cuestion = $entity_manager->find(Cuestion::class, $args['id']);
+        
+        if (null === $cuestion) {    // 404
+            return Error::error($this->container, $request, $response, StatusCode::HTTP_NOT_FOUND);
+        }
+        
+        if(isset($req_data['estado'])){
+            if($req_data['estado']==="abierta"){
+            $cuestion->abrirCuestion();
+            }else if($req_data['estado']==="cerrada"){
+                $cuestion->cerrarCuestion();
+            }else{
+                return Error::error($this->container, $request, $response, StatusCode::HTTP_BAD_REQUEST);
+            }
+        }
+        if(isset($req_data['enunciadoDescripcion'])) {
+            $cuestion->setEnunciadoDescripcion($req_data['enunciadoDescripcion']);
+        }
+
+        if(isset($req_data['enunciadoDisponible'])){
+            $cuestion->setEnunciadoDisponible($req_data['enunciadoDisponible']);
+        }
+
+        if(isset($req_data['creador'])){
+            $usuario = $entity_manager->
+            getRepository(Usuario::class)->
+            findOneBy(['id' => $req_data['creador']]);
+            if($usuario===null || !$usuario->isMaestro()){
+                return Error::error($this->container, $request, $response, StatusCode::HTTP_CONFLICT);
+            }else{
+                $cuestion->setCreador($usuario);
+            }
+        }
+
+        
+        $entity_manager->flush();
+        $this->logger->info(
+            $request->getMethod() . ' ' . $request->getUri()->getPath(),
+            [ 'uid' => $this->jwt->user_id, 'status' => 209 ]
+        );
+
+        return $response
+            ->withJson($cuestion)
+            ->withStatus(209, 'Content Returned');
+
+        
     }
 }
