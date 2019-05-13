@@ -79,8 +79,13 @@ class CuestionController
      */
     public function cget(Request $request, Response $response): Response
     {
+        
         //403 Forbidden
         if (!$this->jwt->user_id) {
+             $this->logger->info(
+            $request->getMethod() . ' ' . $request->getUri()->getPath(),
+                ['uid' => $this->jwt->user_id, 'status' => StatusCode::HTTP_FORBIDDEN ]
+            );
             return Error::error($this->container, $request, $response, StatusCode::HTTP_FORBIDDEN);
         }
 
@@ -91,8 +96,14 @@ class CuestionController
             : Utils::getEntityManager()->getREpository(Cuestion::class)
                 ->findBy(['creador'=> $this->jwt->user_id ]);
         
+
+       
         //404
         if(0===count($cuestiones)){
+            $this->logger->info(
+                $request->getMethod() . ' ' . $request->getUri()->getPath(),
+                ['uid' => $this->jwt->user_id, 'status' => StatusCode::HTTP_NOT_FOUND ]
+            );
              return Error::error($this->container, $request, $response, StatusCode::HTTP_NOT_FOUND);
         }
         
@@ -153,6 +164,10 @@ class CuestionController
     {
         //403
         if (0 === $this->jwt->user_id) {
+            $this->logger->info(
+                $request->getMethod() . ' ' . $request->getUri()->getPath(),
+                [ 'uid' => $this->jwt->user_id, 'status' => StatusCode::HTTP_FORBIDDEN]
+            );
             return Error::error($this->container, $request, $response, StatusCode::HTTP_FORBIDDEN);
         }
 
@@ -162,6 +177,10 @@ class CuestionController
         
         //404 Si no encuentra ninguna con ese id.
         if(null===$cuestion){
+             $this->logger->info(
+                $request->getMethod() . ' ' . $request->getUri()->getPath(),
+                [ 'uid' => $this->jwt->user_id, 'status' => StatusCode::HTTP_NOT_FOUND]
+            );
             return Error::error($this->container,$request, $response, StatusCode::HTTP_NOT_FOUND);
         }
         
@@ -219,6 +238,13 @@ class CuestionController
     {
         //Si no es maestro no puede acceder.
         if (!$this->jwt->isMaestro) { // 403
+            $this->logger->info(
+                $request->getMethod() . ' ' . $request->getUri()->getPath(),
+                [
+                    'uid' => $this->jwt->user_id,
+                    'status' => StatusCode::HTTP_FORBIDDEN
+                ]
+            );
             return Error::error($this->container, $request, $response, StatusCode::HTTP_FORBIDDEN);
         }
 
@@ -229,6 +255,13 @@ class CuestionController
         
         //404 si no encuentra la cuestion
         if(null===$cuestion){
+            $this->logger->info(
+            $request->getMethod() . ' ' . $request->getUri()->getPath(),
+                [
+                    'uid' => $this->jwt->user_id,
+                    'status' => StatusCode::HTTP_NOT_FOUND
+                ]
+            );
             return Error::error($this->container, $request, $response, StatusCode::HTTP_NOT_FOUND);
         }
 
@@ -337,6 +370,17 @@ class CuestionController
      *              ref  = "#/components/schemas/Question"
      *         )
      *     ),
+     *  @OA\Response(
+     *          response    = 400,
+     *          description = "`Bad Request`:estado inválido",
+     *          @OA\JsonContent(
+     *              ref ="#/components/schemas/Message",
+     *              example = {
+     *                  "code"    = 400,
+     *                  "message" = "`Bad Request`: estado inválido"
+     *              }
+     *         )
+     *     ),
      *     @OA\Response(
      *          response    = 401,
      *          ref         = "#/components/responses/401_Standard_Response"
@@ -362,38 +406,52 @@ class CuestionController
      */
     public function post(Request $request, Response $response): Response
     {
-
         if (!$this->jwt->isMaestro) {
+             $this->logger->info(
+                $request->getMethod() . ' ' . $request->getUri()->getPath(),
+                [ 'uid' => $this->jwt->user_id, 'status' => StatusCode::HTTP_FORBIDDEN]
+            );
             
             return Error::error($this->container, $request, $response, StatusCode::HTTP_FORBIDDEN);
         }
 
         $req_data = $request ->getParsedBody() ?? json_decode($request->getBody(),true);
         $entity_manager = Utils::getEntityManager();
-          
-        if($req_data['creador']!==null){
+        $usuario=null; 
+        if(isset($req_data['creador'])){
           
             $usuario = $entity_manager->
             getRepository(Usuario::class)->
             findOneBy(['id' => $req_data['creador']]);
             if($usuario===null || !$usuario->isMaestro()){
-            return Error::error($this->container, $request, $response, StatusCode::HTTP_CONFLICT);
-        }
-        }
-        //compruebo que sea maestro, si no es maestro el usuario entonces lanzo un error 409 o si no existe. 
-        
+                //409
+                $this->logger->info(
+                    $request->getMethod() . ' ' . $request->getUri()->getPath(),
+                    [ 'uid' => $this->jwt->user_id, 'status' => StatusCode::HTTP_CONFLICT]
+                );
+                return Error::error($this->container, $request, $response, StatusCode::HTTP_CONFLICT);
+            }
+        } 
+
          //201
-        
-        
         $cuestion = new Cuestion(
-            $req_data['enunciadoDescripcion'],
+            $req_data['enunciadoDescripcion'] ?? null,
             $usuario,
-            $req_data['enunciadoDisponible']
+            $req_data['enunciadoDisponible'] ?? false
         );
 
         //si se crea abierta entonces la abro. 
-        if($req_data['estado']==="abierta"){
-            $cuestion->abrirCuestion();
+        if(isset($req_data['estado'])){
+            if($req_data['estado']==="abierta"){
+                $cuestion->abrirCuestion();
+            }
+            else if ($req_data['estado']!="cerrada"){
+                $this->logger->info(
+                    $request->getMethod() . ' ' . $request->getUri()->getPath(),
+                    [ 'uid' => $this->jwt->user_id, 'status' => StatusCode::HTTP_BAD_REQUEST ]
+                );
+                return Error::error($this->container, $request, $response, StatusCode::HTTP_BAD_REQUEST);
+            }
         }
 
         $entity_manager -> persist($cuestion);
@@ -403,6 +461,7 @@ class CuestionController
             [ 'uid' => $this->jwt->user_id, 'status' => StatusCode::HTTP_CREATED ]
         );
 
+        //201
         return $response->withJson($cuestion, StatusCode::HTTP_CREATED); // 201
         
     }
@@ -429,7 +488,15 @@ class CuestionController
      *     security    = {
      *          { "TDWApiSecurity": {} }
      *     },
+     *    
      *     @OA\Response(
+     *          response    = 209,
+     *          description = "`Content Returned`: question previously existed and is now updated",
+     *          @OA\JsonContent(
+     *              ref = "#/components/schemas/Question"
+     *         )
+     *     ),
+     * @OA\Response(
      *          response    = 400,
      *          description = "`Bad Request`:estado inválido",
      *          @OA\JsonContent(
@@ -438,13 +505,6 @@ class CuestionController
      *                  "code"    = 400,
      *                  "message" = "`Bad Request`: estado inválido"
      *              }
-     *         )
-     *     ),
-     *     @OA\Response(
-     *          response    = 209,
-     *          description = "`Content Returned`: question previously existed and is now updated",
-     *          @OA\JsonContent(
-     *              ref = "#/components/schemas/Question"
      *         )
      *     ),
      *     @OA\Response(
@@ -479,6 +539,10 @@ class CuestionController
     public function put(Request $request, Response $response, array $args): Response
     {
         if (!$this->jwt->isMaestro) { // 403
+            $this->logger->info(
+            $request->getMethod() . ' ' . $request->getUri()->getPath(),
+            [ 'uid' => $this->jwt->user_id, 'status' => StatusCode::HTTP_FORBIDDEN]
+        );
             return Error::error($this->container, $request, $response, StatusCode::HTTP_FORBIDDEN);
         }
         $req_data
@@ -492,6 +556,10 @@ class CuestionController
         $cuestion = $entity_manager->find(Cuestion::class, $args['id']);
         
         if (null === $cuestion) {    // 404
+            $this->logger->info(
+                $request->getMethod() . ' ' . $request->getUri()->getPath(),
+                [ 'uid' => $this->jwt->user_id, 'status' => StatusCode::HTTP_NOT_FOUND]
+            );
             return Error::error($this->container, $request, $response, StatusCode::HTTP_NOT_FOUND);
         }
         

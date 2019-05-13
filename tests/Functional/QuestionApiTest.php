@@ -117,7 +117,37 @@ class QuestionApiTest extends BaseTestCase
             $r_data['message']
         );
     }
-
+/**
+     * Test POST /questions/ 400
+     * 
+     * @param array $question Question returned by testPostQuestion201()
+     * @depends testPostQuestion201
+     * @covers ::post
+     * 
+     */
+    public function testPostQuestion400(array $question) : void {
+        $p_data = [
+            'estado' => "abirto"
+        ];
+        $response = $this->runApp(
+            'POST',
+            self::$ruta_base,
+            $p_data,
+            $this->getTokenHeaders()
+        );
+        echo $response->getBody();
+        self::assertSame(400,$response->getStatusCode());
+        $r_body = (string) $response->getBody();
+        self::assertJson($r_body);
+        self::assertStringContainsString('code', $r_body);
+        self::assertStringContainsString('message', $r_body);
+        $r_data = json_decode($r_body, true);
+        self::assertSame(StatusCode::HTTP_BAD_REQUEST, $r_data['code']);
+        self::assertSame(
+            Error::MESSAGES[StatusCode::HTTP_BAD_REQUEST],
+            $r_data['message']
+        );
+    }
     /**
      * Test POST /questions
      *
@@ -127,10 +157,10 @@ class QuestionApiTest extends BaseTestCase
      */
     public function testPostQuestion201(): array
     {
+        
         $p_data = [ // Sin creador
-            // 'creador'              => 1,
             'enunciadoDescripcion' => self::$faker->text(255),
-            'enunciadoDisponible'  => self::$faker->boolean,
+            'enunciadoDisponible'  => self::$faker->boolean
         ];
         $headers = $this->getTokenHeaders(
             self::$admin['username'],
@@ -139,6 +169,7 @@ class QuestionApiTest extends BaseTestCase
         $response = $this->runApp('POST', self::$ruta_base, $p_data, $headers);
 
         self::assertSame(201, $response->getStatusCode());
+        
         self::assertJson((string) $response->getBody());
         $responseQuestion = json_decode((string) $response->getBody(), true);
         $cuestionData = $responseQuestion['cuestion'];
@@ -277,6 +308,36 @@ class QuestionApiTest extends BaseTestCase
         return $question_aux['cuestion'];
     }
 
+    /**
+     * Test PUT /questions/questionId 400
+     * 
+     * @param array $question Question returned by testPostQuestion201()
+     * @depends testPostQuestion201
+     * @covers ::put
+     * 
+     */
+    public function testPutQuestion400(array $question) : void {
+        $p_data = [
+            'estado' => "abirto"
+        ];
+        $response = $this->runApp(
+            'PUT',
+            self::$ruta_base.'/'.$question['idCuestion'],
+            $p_data,
+            $this->getTokenHeaders()
+        );
+        self::assertSame(400,$response->getStatusCode());
+        $r_body = (string) $response->getBody();
+        self::assertJson($r_body);
+        self::assertStringContainsString('code', $r_body);
+        self::assertStringContainsString('message', $r_body);
+        $r_data = json_decode($r_body, true);
+        self::assertSame(StatusCode::HTTP_BAD_REQUEST, $r_data['code']);
+        self::assertSame(
+            Error::MESSAGES[StatusCode::HTTP_BAD_REQUEST],
+            $r_data['message']
+        );
+    }
     /**
      * Test OPTIONS /questions[/questionId]
      *
@@ -422,7 +483,6 @@ class QuestionApiTest extends BaseTestCase
             null,
             self::$headers
         );
-
         self::assertSame(403, $response->getStatusCode());
         $r_body = (string) $response->getBody();
         self::assertStringContainsString('code', $r_body);
