@@ -19,7 +19,7 @@ class Error
     // Error messages
     public const MESSAGES = [
         StatusCode::HTTP_BAD_REQUEST            // 400
-            => '`Bad Request` User name or e-mail already exists',
+            => '`Bad Request` Insert valid data',
         StatusCode::HTTP_UNAUTHORIZED           // 401
             => 'UNAUTHORIZED: invalid `Authorization` header',
         StatusCode::HTTP_FORBIDDEN              // 403

@@ -128,14 +128,14 @@ paths:
               schema:
                 $ref: "#/components/schemas/Question"
         "400":
-          description: "`Bad Request`: `estado` is invalid"
+          description: "`Bad Request`:insert valid data"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Message"
               example:
                 code: 400
-                message: "`Bad Request`: `estado` is invalid"
+                message: "`Bad Request`: `insert valid data"
         "401":
           $ref: "#/components/responses/401_Standard_Response"
         "403":
@@ -275,7 +275,7 @@ paths:
                 $ref: "#/components/schemas/Message"
               example:
                 code: 400
-                message: "`Bad Request`: username or e-mail already exists"
+                message: "`Bad Request`: insert valid data"
         "401":
           $ref: "#/components/responses/401_Standard_Response"
         "403":
@@ -352,14 +352,14 @@ paths:
               schema:
                 $ref: "#/components/schemas/User"
         "400":
-          description: "`Bad Request`: username or e-mail already exists"
+          description: "`Bad Request`: insert valid data"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Message"
               example:
                 code: 400
-                message: "`Bad Request`: username or e-mail already exists"
+                message: "`Bad Request`: insert valid data"
         "401":
           $ref: "#/components/responses/401_Standard_Response"
         "403":

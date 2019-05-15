@@ -375,12 +375,12 @@ class UsuarioController
      *     ),
      *     @OA\Response(
      *          response    = 400,
-     *          description = "`Bad Request`: username or e-mail already exists",
+     *          description = "`Bad Request`: insert valid data",
      *          @OA\JsonContent(
      *              ref = "#/components/schemas/Message",
      *              example = {
      *                  "code"    = 400,
-     *                  "message" = "`Bad Request`: username or e-mail already exists"
+     *                  "message" = "`Bad Request`: insert valid data"
      *              }
      *         )
      *     ),
@@ -433,7 +433,7 @@ class UsuarioController
             ->getRepository(Usuario::class)
             ->matching($criteria);
 
-        if (count($usuario)) {    // HTTP_BAD_REQUEST 400: username or e-mail already exists
+        if (count($usuario)) {    // HTTP_BAD_REQUEST 400: insert valid data
             return Error::error($this->container, $request, $response, StatusCode::HTTP_BAD_REQUEST);
         }
 
@@ -488,12 +488,12 @@ class UsuarioController
      *     ),
      *     @OA\Response(
      *          response    = 400,
-     *          description = "`Bad Request`: username or e-mail already exists",
+     *          description = "`Bad Request`: insert valid data",
      *          @OA\JsonContent(
      *              ref ="#/components/schemas/Message",
      *              example = {
      *                  "code"    = 400,
-     *                  "message" = "`Bad Request`: username or e-mail already exists"
+     *                  "message" = "`Bad Request`:insert valid data"
      *              }
      *         )
      *     ),
@@ -535,7 +535,7 @@ class UsuarioController
 
         if (isset($req_data['username'])) {
             $usuario = $entity_manager->getRepository(Usuario::class)->findOneBy(['username' => $req_data['username']]);
-            if (null !== $usuario) {    // 400 BAD_REQUEST: username already exists
+            if (null !== $usuario) {    // 400 BAD_REQUEST: insert valid data
                 return Error::error($this->container, $request, $response, StatusCode::HTTP_BAD_REQUEST);
             }
             $user->setUsername($req_data['username']);
@@ -543,7 +543,7 @@ class UsuarioController
 
         if (isset($req_data['email'])) {
             $usuario = $entity_manager->getRepository(Usuario::class)->findOneBy(['email' => $req_data['email']]);
-            if (null !== $usuario) {    // 400 BAD_REQUEST: e-mail already exists
+            if (null !== $usuario) {    // 400 BAD_REQUEST: insert valid data
                 return Error::error($this->container, $request, $response, StatusCode::HTTP_BAD_REQUEST);
             }
             $user->setEmail($req_data['email']);
