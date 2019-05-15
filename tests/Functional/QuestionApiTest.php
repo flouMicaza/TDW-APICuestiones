@@ -135,7 +135,6 @@ class QuestionApiTest extends BaseTestCase
             $p_data,
             $this->getTokenHeaders()
         );
-        echo $response->getBody();
         self::assertSame(400,$response->getStatusCode());
         $r_body = (string) $response->getBody();
         self::assertJson($r_body);
