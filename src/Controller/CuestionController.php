@@ -374,7 +374,9 @@ class CuestionController
      *                   "code"      = 409,
      *                   "message"   = "`Conflict`: the creator does not exist or is not a teacher."
      *              }
-     *         ),
+     *         )
+     * )
+     * )
 
      * @param Request $request
      * @param Response $response
