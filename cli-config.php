@@ -6,7 +6,7 @@
 
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use TDW\GCuest\Utils;
-
+require_once 'bootstrap.php';
 // Load env variables from .env + (.docker ||.local )
 Utils::loadEnv(__DIR__);
 
