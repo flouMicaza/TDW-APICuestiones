@@ -1,11 +1,15 @@
 <?php
-
-
+/**
+ * PHP version 7.2
+ * src\Entity\PropuestaSolucion.php
+ */
 
 namespace TDW\GCuest\Entity;
-use Doctrine\ORM\Mapping as ORM;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+use OpenApi\Annotations as OA;
 
 /**
  * PrpuestaSolucion
@@ -46,24 +50,18 @@ class PrpuestaSolucion
     private $error;
 
     /**
-     * @var \Soluciones
+     * @var int
      *
-     * @ORM\ManyToOne(targetEntity="Soluciones")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="soluciones_idsoluciones", referencedColumnName="idsoluciones")
-     * })
+     * @ORM\Column(name="soluciones_idsoluciones", type="integer", nullable=false)
      */
-    private $solucionessoluciones;
+    private $solucionesIdsoluciones;
 
     /**
-     * @var \Usuario
+     * @var int
      *
-     * @ORM\ManyToOne(targetEntity="Usuario")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="usuarios_id", referencedColumnName="id")
-     * })
+     * @ORM\Column(name="usuarios_id", type="integer", nullable=false)
      */
-    private $usuarios;
+    private $usuariosId;
 
 
 }

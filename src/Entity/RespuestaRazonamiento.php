@@ -1,10 +1,16 @@
 <?php
-
+/**
+ * PHP version 7.2
+ * src\Entity\RespuestaRazonamiento.php
+ */
 
 namespace TDW\GCuest\Entity;
-use Doctrine\ORM\Mapping as ORM;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+use OpenApi\Annotations as OA;
+
 /**
  * RespuestaRazonamiento
  *
@@ -18,7 +24,7 @@ class RespuestaRazonamiento
      *
      * @ORM\Column(name="idrespuesta_razonamiento", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $idrespuestaRazonamiento;
 
@@ -30,28 +36,18 @@ class RespuestaRazonamiento
     private $respuesta;
 
     /**
-     * @var \Razonamiento
+     * @var int
      *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="Razonamiento")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="razonamiento_idrazonamiento", referencedColumnName="idrazonamiento")
-     * })
+     * @ORM\Column(name="usuarios_id", type="integer", nullable=false)
      */
-    private $razonamientorazonamiento;
+    private $usuariosId;
 
     /**
-     * @var \Usuario
+     * @var int
      *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="Usuario")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="usuarios_id", referencedColumnName="id")
-     * })
+     * @ORM\Column(name="razonamiento_idrazonamiento", type="integer", nullable=false)
      */
-    private $usuario;
+    private $razonamientoIdrazonamiento;
 
 
 }

@@ -1,10 +1,15 @@
 <?php
-
+/**
+ * PHP version 7.2
+ * src\Entity\Soluciones.php
+ */
 
 namespace TDW\GCuest\Entity;
-use Doctrine\ORM\Mapping as ORM;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+use OpenApi\Annotations as OA;
 
 /**
  * Soluciones
@@ -38,14 +43,11 @@ class Soluciones
     private $correcta;
 
     /**
-     * @var \Cuestion
+     * @var int
      *
-     * @ORM\ManyToOne(targetEntity="Cuestion")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="cuestiones_idCuestion", referencedColumnName="idCuestion")
-     * })
+     * @ORM\Column(name="cuestiones_idCuestion", type="integer", nullable=false)
      */
-    private $cuestionescuestion;
+    private $cuestionesIdcuestion;
 
 
 }

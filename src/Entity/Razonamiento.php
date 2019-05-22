@@ -1,11 +1,15 @@
 <?php
-
-
+/**
+ * PHP version 7.2
+ * src\Entity\Razonamiento.php
+ */
 
 namespace TDW\GCuest\Entity;
-use Doctrine\ORM\Mapping as ORM;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+use OpenApi\Annotations as OA;
 
 /**
  * Razonamiento
@@ -46,14 +50,11 @@ class Razonamiento
     private $error;
 
     /**
-     * @var \Soluciones
+     * @var int
      *
-     * @ORM\ManyToOne(targetEntity="Soluciones")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="soluciones_idsoluciones", referencedColumnName="idsoluciones")
-     * })
+     * @ORM\Column(name="soluciones_idsoluciones", type="integer", nullable=false)
      */
-    private $solucionessoluciones;
+    private $solucionesIdsoluciones;
 
 
 }
