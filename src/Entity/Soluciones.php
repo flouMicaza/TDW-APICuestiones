@@ -70,18 +70,47 @@ class Soluciones implements \JsonSerializable
         $this->descripcion = $descripcion;
         $this->cuestionIdcuestion = $cuestionesIdcuestion;
     }
-
+    /**
+     * @return int
+     */
     public function getIdSolucion(){
         return $this->idSoluciones;
     }
+    /**
+     * @return string
+     */
     public function getDescription(){
         return $this->descripcion;
     }
+    /**
+     * @return bool
+     */
     public function isCorrecta(){
         return $this->correcta;
     }
+    /**
+     * @return int
+     */
     public function getIdCuestion(){
         return $this->cuestionesIdcuestion;
+    }
+    /**
+     * @param string $descripcion
+     * @return Soluciones
+     */
+    public function setDescripcion(string $descripcion): Soluciones
+    {
+        $this->descripcion = $descripcion;
+        return $this;
+    }
+    /**
+     * @param bool $correcta
+     * @return Soluciones
+     */
+    public function setCorrecta(bool $correcta): Soluciones
+    {
+        $this->correcta = $correcta;
+        return $this;
     }
         /**
      * The __toString method allows a class to decide how it will react when it is converted to a string.
@@ -109,7 +138,7 @@ class Soluciones implements \JsonSerializable
     {
         return [
             'soluciones' => [
-                'idsoluciones' => $this->getIdSolucion(),
+                'idSoluciones' => $this->getIdSolucion(),
                 'descripcion' => $this->getDescription(),
                 'correcta' => $this->isCorrecta(),
                 'cuestionesIdcuestion' => $this->getIdCuestion(),
@@ -158,6 +187,30 @@ class Soluciones implements \JsonSerializable
  *     }
  * )
  */
+/**
+ * Soluciones data definition
+ *
+ * @OA\Schema(
+ *      schema          = "SolucionesData",
+ *      @OA\Property(
+ *          property    = "descripcion",
+ *          description = "Soluciones descripcion",
+ *          type        = "string"
+ *      ),
+ *      @OA\Property(
+ *          property    = "correcta",
+ *          description = "Denotes if solucion is correct",
+ *          type        = "boolean"
+ *      ),
+ *      
+ *      
+ *      example = {
+ *          "descripcion" = "Solucion description",
+ *          "correcta"  = true
+ *      }
+ * )
+ */
+
 /**
  * Solution array definition
  *

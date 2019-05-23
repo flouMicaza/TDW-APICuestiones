@@ -140,3 +140,9 @@ $app->put(
      $_ENV['RUTA_API'] . '/solutions/{id:[0-9]+}',
      SolucionController::class . ':get'
  )->setName('tdw_get_solutions');
+
+ // PUT: Updates a question
+$app->put(
+    $_ENV['RUTA_API'] . '/solutions/{id:[0-9]+}',
+    SolucionController::class . ':put'
+)->setName('tdw_put_solutions');

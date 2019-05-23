@@ -51,7 +51,7 @@ class SolucionController
      *     path        = "/solutions/{questionId}",
      *     tags        = { "Solutions" },
      *     summary     = "Returns a list of solutions based on a question ID",
-     *     description = "Returns the list if solutions identified by `questionId`.",
+     *     description = "Returns the list if solutions related with `questionId`.",
      *     operationId = "tdw_get_solutions",
      *     @OA\Parameter(
      *          ref    = "#/components/parameters/questionId"
@@ -131,4 +131,105 @@ class SolucionController
             );
          //return Error::error($this->container, $request, $response, StatusCode::HTTP_NOT_IMPLEMENTED);
         }
+
+    /**
+     * Summary: Updates a solution
+     *
+     * @OA\Put(
+     *     path        = "/solutions/{solutionId}",
+     *     tags        = { "Solutions" },
+     *     summary     = "Updates a solution",
+     *     description = "Updates the solution identified by `solutionsId`.",
+     *     operationId = "tdw_put_solutions",
+     *     @OA\Parameter(
+     *          ref    = "#/components/parameters/solutionId"
+     *     ),
+     *     @OA\RequestBody(
+     *         description = "`Solution` data to update",
+     *         required    = true,
+     *         @OA\JsonContent(
+     *             ref = "#/components/schemas/SolucionesData"
+     *         )
+     *     ),
+     *     security    = {
+     *          { "TDWApiSecurity": {} }
+     *     },
+     *    
+     *     @OA\Response(
+     *          response    = 209,
+     *          description = "`Content Returned`: question previously existed and is now updated",
+     *          @OA\JsonContent(
+     *              ref = "#/components/schemas/Question"
+     *         )
+     *     ),
+     * @OA\Response(
+     *          response    = 400,
+     *          description = "`Bad Request`:insert valid data",
+     *          @OA\JsonContent(
+     *              ref ="#/components/schemas/Message",
+     *              example = {
+     *                  "code"    = 400,
+     *                  "message" = "`Bad Request`: insert valid data"
+     *              }
+     *         )
+     *     ),
+     *     @OA\Response(
+     *          response    = 401,
+     *          ref         = "#/components/responses/401_Standard_Response"
+     *     ),
+     *     @OA\Response(
+     *          response    = 403,
+     *          ref         = "#/components/responses/403_Forbidden_Response"
+     *     ),
+     *     @OA\Response(
+     *          response    = 404,
+     *          ref         = "#/components/responses/404_Resource_Not_Found_Response"
+     *     ),
+     *     
+     * )
+     * @param Request $request
+     * @param Response $response
+     * @param array $args
+     * @return Response
+     */
+    public function put(Request $request, Response $response, array $args): Response
+    {
+        if (!$this->jwt->isMaestro) { // 403
+           
+            return Error::error($this->container, $request, $response, StatusCode::HTTP_FORBIDDEN);
+        }
+        $req_data
+            = $request->getParsedBody()
+            ?? json_decode($request->getBody(), true);
+        $entity_manager = Utils::getEntityManager();
+
+    /** @var Soluciones $solucion */
+        $solucion = $entity_manager->find(Soluciones::class, $args['id']);
+        
+        if (null === $solucion) {    // 404
+            
+            return Error::error($this->container, $request, $response, StatusCode::HTTP_NOT_FOUND);
+        }
+        if(isset($req_data['descripcion'])){
+            $solucionIgual = $entity_manager ->getRepository(Soluciones::class)->findOneBy(['descripcion'=>$req_data['descripcion']]);
+            //no pueden haber dos soluciones con la misma descripcion
+            if(null!==$solucionIgual){
+                return Error::error($this->container, $request, $response, StatusCode::HTTP_BAD_REQUEST);
+            }
+            $solucion->setDescripcion($req_data['descripcion']);
+        }
+        if(isset($req_data['correcta'])){
+            $solucion->setCorrecta($req_data['correcta']);
+        }
+        $entity_manager->flush();
+        $this->logger->info(
+            $request->getMethod() . ' ' . $request->getUri()->getPath(),
+            [ 'uid' => $this->jwt->user_id, 'status' => 209 ]
+        );
+
+        return $response
+            ->withJson($solucion)
+            ->withStatus(209, 'Content Returned');
+    
+    }
 }

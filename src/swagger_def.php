@@ -81,6 +81,16 @@ use OpenApi\Annotations as OA;
  *          type    = "integer"
  *      )
  * )
+ * @OA\Parameter(
+ *      name        = "solutionId",
+ *      in          = "path",
+ *      description = "ID of solution",
+ *      required    = true,
+ *      @OA\Schema(
+ *          format  = "int64",
+ *          type    = "integer"
+ *      )
+ * )
  */
 
 /**

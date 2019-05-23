@@ -249,7 +249,7 @@ paths:
       tags:
         - Solutions
       summary: 'Returns a list of solutions based on a question ID'
-      description: 'Returns the list if solutions identified by `questionId`.'
+      description: 'Returns the list if solutions related with `questionId`.'
       operationId: tdw_get_solutions
       parameters:
         -
@@ -261,6 +261,48 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SolutionsArray'
+        '401':
+          $ref: '#/components/responses/401_Standard_Response'
+        '403':
+          $ref: '#/components/responses/403_Forbidden_Response'
+        '404':
+          $ref: '#/components/responses/404_Resource_Not_Found_Response'
+      security:
+        -
+          TDWApiSecurity: []
+  '/solutions/{solutionId}':
+    put:
+      tags:
+        - Solutions
+      summary: 'Updates a solution'
+      description: 'Updates the solution identified by `solutionsId`.'
+      operationId: tdw_put_solutions
+      parameters:
+        -
+          $ref: '#/components/parameters/solutionId'
+      requestBody:
+        description: '`Solution` data to update'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SolucionesData'
+      responses:
+        '209':
+          description: '`Content Returned`: question previously existed and is now updated'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
+        '400':
+          description: '`Bad Request`:insert valid data'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+              example:
+                code: 400
+                message: '`Bad Request`: insert valid data'
         '401':
           $ref: '#/components/responses/401_Standard_Response'
         '403':
@@ -560,6 +602,18 @@ components:
           descripcion: 'Solution description'
           correcta: true
           cuestionesIdcuestion: 7
+    SolucionesData:
+      properties:
+        descripcion:
+          description: 'Soluciones descripcion'
+          type: string
+        correcta:
+          description: 'Denotes if solucion is correct'
+          type: boolean
+      type: object
+      example:
+        descripcion: 'Solucion description'
+        correcta: true
     SolutionsArray:
       properties:
         soluciones:
@@ -703,6 +757,14 @@ components:
       name: questionId
       in: path
       description: 'ID of question'
+      required: true
+      schema:
+        type: integer
+        format: int64
+    solutionId:
+      name: solutionId
+      in: path
+      description: 'ID of solution'
       required: true
       schema:
         type: integer
