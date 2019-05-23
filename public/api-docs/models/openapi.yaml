@@ -291,6 +291,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Solution'
+        '400':
+          description: '`Bad Request`:insert valid data'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+              example:
+                code: 400
+                message: '`Bad Request`: insert valid data'
         '401':
           $ref: '#/components/responses/401_Standard_Response'
         '403':
@@ -307,6 +316,20 @@ paths:
       security:
         -
           TDWApiSecurity: []
+    options:
+      tags:
+        - Solutions
+      summary: 'Provides the list of HTTP supported methods'
+      description: 'Return a `Allow` header with a comma separated list of HTTP supported methods.'
+      operationId: tdw_options_solutions
+      responses:
+        '200':
+          description: '`Allow` header &lt;Response body is empty&gt;'
+          headers:
+            Allow:
+              description: 'List of HTTP supported methods'
+              schema:
+                type: string
   '/solutions/{solutionId}':
     put:
       tags:
@@ -349,6 +372,23 @@ paths:
       security:
         -
           TDWApiSecurity: []
+    options:
+      tags:
+        - Solutions
+      summary: 'Provides the list of HTTP supported methods'
+      description: 'Return a `Allow` header with a comma separated list of HTTP supported methods.'
+      operationId: tdw_options_solutions_id
+      parameters:
+        -
+          $ref: '#/components/parameters/solutionId'
+      responses:
+        '200':
+          description: '`Allow` header &lt;Response body is empty&gt;'
+          headers:
+            Allow:
+              description: 'List of HTTP supported methods'
+              schema:
+                type: string
   /users:
     get:
       tags:

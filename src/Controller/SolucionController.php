@@ -349,4 +349,68 @@ class SolucionController
             ->withStatus(209, 'Content Returned');
     
     }
+    /**
+     * Summary: Provides the list of HTTP supported methods
+     *
+     * @OA\Options(
+     *     path        = "/solutions",
+     *     tags        = { "Solutions" },
+     *     summary     = "Provides the list of HTTP supported methods",
+     *     description = "Return a `Allow` header with a comma separated list of HTTP supported methods.",
+     *     operationId = "tdw_options_solutions",
+     *     @OA\Response(
+     *          response    = 200,
+     *          description = "`Allow` header &lt;Response body is empty&gt;",
+     *          @OA\Header(
+     *              header      = "Allow",
+     *              description = "List of HTTP supported methods",
+     *              @OA\Schema(
+     *                  type="string"
+     *              )
+     *          )
+     *     )
+     * )
+     *
+     * @OA\Options(
+     *     path        = "/solutions/{solutionId}",
+     *     tags        = { "Solutions" },
+     *     summary     = "Provides the list of HTTP supported methods",
+     *     description = "Return a `Allow` header with a comma separated list of HTTP supported methods.",
+     *     operationId = "tdw_options_solutions_id",
+     *     parameters={
+     *          { "$ref" = "#/components/parameters/solutionId" },
+     *     },
+     *     @OA\Response(
+     *          response    = 200,
+     *          description = "`Allow` header &lt;Response body is empty&gt;",
+     *          @OA\Header(
+     *              header      = "Allow",
+     *              description = "List of HTTP supported methods",
+     *              @OA\Schema(
+     *                  type="string"
+     *              )
+     *          )
+     *     )
+     * )
+     * @param Request $request
+     * @param Response $response
+     * @param array $args
+     * @return Response
+     */
+    public function options(Request $request, Response $response, array $args): Response
+    {
+        $this->logger->info(
+            $request->getMethod() . ' ' . $request->getUri()->getPath()
+        );
+
+        $methods = isset($args['id'])
+            ? [ 'GET', 'PUT', 'DELETE' ]
+            : [ 'GET', 'POST' ];
+
+        return $response
+            ->withAddedHeader(
+                'Allow',
+                implode(', ', $methods)
+            );
+    }
 }
