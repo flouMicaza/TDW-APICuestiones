@@ -244,6 +244,32 @@ paths:
                 token: '<JSON web token>'
         '404':
           $ref: '#/components/responses/404_Resource_Not_Found_Response'
+  '/solutions/{questionId}':
+    get:
+      tags:
+        - Solutions
+      summary: 'Returns a list of solutions based on a question ID'
+      description: 'Returns the list if solutions identified by `questionId`.'
+      operationId: tdw_get_solutions
+      parameters:
+        -
+          $ref: '#/components/parameters/questionId'
+      responses:
+        '200':
+          description: 'Array of Solutions'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SolutionsArray'
+        '401':
+          $ref: '#/components/responses/401_Standard_Response'
+        '403':
+          $ref: '#/components/responses/403_Forbidden_Response'
+        '404':
+          $ref: '#/components/responses/404_Resource_Not_Found_Response'
+      security:
+        -
+          TDWApiSecurity: []
   /users:
     get:
       tags:
@@ -508,6 +534,39 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Question'
+      type: object
+    Solution:
+      required:
+        - idSoluciones
+      properties:
+        idSoluciones:
+          description: 'Soluciones Id'
+          type: integer
+          format: int64
+        descripcion:
+          description: 'Soluciones description'
+          type: string
+        correcta:
+          description: 'Denotes if solution is correct'
+          type: boolean
+        cuestionesIdcuestion:
+          description: 'Solutions parent question'
+          type: integer
+          format: int64
+      type: object
+      example:
+        solucion:
+          idSoluciones: 805
+          descripcion: 'Solution description'
+          correcta: true
+          cuestionesIdcuestion: 7
+    SolutionsArray:
+      properties:
+        soluciones:
+          description: 'Solutions array'
+          type: array
+          items:
+            $ref: '#/components/schemas/Solution'
       type: object
     User:
       required:

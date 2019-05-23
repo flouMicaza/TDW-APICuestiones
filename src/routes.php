@@ -10,6 +10,7 @@ use Slim\Http\StatusCode;
 use TDW\GCuest\Controller\CuestionController;
 use TDW\GCuest\Controller\LoginController;
 use TDW\GCuest\Controller\UsuarioController;
+use TDW\GCuest\Controller\SolucionController;
 
 /**
  * @var \Slim\App $app
@@ -126,3 +127,16 @@ $app->put(
     $_ENV['RUTA_API'] . '/questions/{id:[0-9]+}',
     CuestionController::class . ':put'
 )->setName('tdw_put_questions');
+
+
+
+/**
+ * ############################################################
+ * Solucion routes
+ * ############################################################
+ */
+
+ $app ->get(
+     $_ENV['RUTA_API'] . '/solutions/{id:[0-9]+}',
+     SolucionController::class . ':get'
+ )->setName('tdw_get_solutions');

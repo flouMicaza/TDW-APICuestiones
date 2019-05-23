@@ -51,3 +51,58 @@ class Soluciones
 
 
 }
+/**
+ * Solution definition
+ *
+ * @OA\Schema(
+ *     schema = "Solution",
+ *     type   = "object",
+ *     required = { "idSoluciones" },
+ *     @OA\Property(
+ *          property    = "idSoluciones",
+ *          description = "Soluciones Id",
+ *          format      = "int64",
+ *          type        = "integer"
+ *      ),
+ *      @OA\Property(
+ *          property    = "descripcion",
+ *          description = "Soluciones description",
+ *          type        = "string"
+ *      ),
+ *      @OA\Property(
+ *          property    = "correcta",
+ *          description = "Denotes if solution is correct",
+ *          type        = "boolean"
+ *      ),
+ *      @OA\Property(
+ *          property    = "cuestionesIdcuestion",
+ *          description = "Solutions parent question",
+ *          format      = "int64",
+ *          type        = "integer"
+ *      ),
+ *      
+ *      example = {
+ *          "solucion" = {
+ *              "idSoluciones"           = 805,
+ *              "descripcion" = "Solution description",
+ *              "correcta"  = true,
+ *              "cuestionesIdcuestion"              = 7
+ *          }
+ *     }
+ * )
+ */
+/**
+ * Solution array definition
+ *
+ * @OA\Schema(
+ *     schema           = "SolutionsArray",
+ *     @OA\Property(
+ *          property    = "soluciones",
+ *          description = "Solutions array",
+ *          type        = "array",
+ *          @OA\Items(
+ *              ref     = "#/components/schemas/Solution"
+ *          )
+ *     )
+ * )
+ */
