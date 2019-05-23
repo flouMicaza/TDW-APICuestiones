@@ -141,6 +141,12 @@ $app->put(
      SolucionController::class . ':get'
  )->setName('tdw_get_solutions');
 
+ // POST: Creates a new solution
+$app->post(
+    $_ENV['RUTA_API'] . '/solutions',
+    SolucionController::class . ':post'
+)->setName('tdw_post_solutions');
+
  // PUT: Updates a question
 $app->put(
     $_ENV['RUTA_API'] . '/solutions/{id:[0-9]+}',

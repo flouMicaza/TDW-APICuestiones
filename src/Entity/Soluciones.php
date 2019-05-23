@@ -53,7 +53,7 @@ class Soluciones implements \JsonSerializable
     private $cuestionesIdcuestion;
     
         /**
-     * Cuestion constructor.
+     * Soluciones constructor.
      *
      * @param string  $descripcion
      * @param bool $correcta
@@ -68,7 +68,9 @@ class Soluciones implements \JsonSerializable
     ) {
         $this->idSoluciones = 0;
         $this->descripcion = $descripcion;
-        $this->cuestionIdcuestion = $cuestionesIdcuestion;
+        $this->correcta = $correcta;
+        $this->cuestionesIdcuestion = $cuestionesIdcuestion;
+        
     }
     /**
      * @return int
@@ -153,13 +155,8 @@ class Soluciones implements \JsonSerializable
  * @OA\Schema(
  *     schema = "Solution",
  *     type   = "object",
- *     required = { "idSoluciones" },
- *     @OA\Property(
- *          property    = "idSoluciones",
- *          description = "Soluciones Id",
- *          format      = "int64",
- *          type        = "integer"
- *      ),
+ *     required = { "descripcion","cuestionesIdcuestion" },
+ *     
  *      @OA\Property(
  *          property    = "descripcion",
  *          description = "Soluciones description",
@@ -178,13 +175,11 @@ class Soluciones implements \JsonSerializable
  *      ),
  *      
  *      example = {
- *          "solucion" = {
- *              "idSoluciones"           = 805,
  *              "descripcion" = "Solution description",
  *              "correcta"  = true,
  *              "cuestionesIdcuestion"              = 7
  *          }
- *     }
+ *     
  * )
  */
 /**

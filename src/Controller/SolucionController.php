@@ -129,9 +129,126 @@ class SolucionController
                 ['soluciones' => $soluciones],
                 StatusCode::HTTP_OK // 200
             );
-         //return Error::error($this->container, $request, $response, StatusCode::HTTP_NOT_IMPLEMENTED);
+         }
+
+
+        /**
+     * Summary: Creates a new question
+     *
+     * @OA\Post(
+     *     path        = "/solutions",
+     *     tags        = { "Solutions" },
+     *     summary     = "Creates a new solution",
+     *     description = "Creates a new solution",
+     *     operationId = "tdw_post_solutions",
+     *     @OA\RequestBody(
+     *         description = "`Soluciones` properties to add to the system",
+     *         required    = true,
+     *         @OA\JsonContent(
+     *             ref = "#/components/schemas/Solution"
+     *         )
+     *     ),
+     *     security    = {
+     *          { "TDWApiSecurity": {} }
+     *     },
+     *     @OA\Response(
+     *          response    = 201,
+     *          description = "`Created`: question created",
+     *          @OA\JsonContent(
+     *              ref  = "#/components/schemas/Solution"
+     *         )
+     *     ),
+     *      * @OA\Response(
+     *          response    = 400,
+     *          description = "`Bad Request`:insert valid data",
+     *          @OA\JsonContent(
+     *              ref ="#/components/schemas/Message",
+     *              example = {
+     *                  "code"    = 400,
+     *                  "message" = "`Bad Request`: insert valid data"
+     *              }
+     *         )
+     *     ),
+     *     @OA\Response(
+     *          response    = 401,
+     *          ref         = "#/components/responses/401_Standard_Response"
+     *     ),
+     *     @OA\Response(
+     *          response    = 403,
+     *          ref         = "#/components/responses/403_Forbidden_Response"
+     *     ),
+     *     @OA\Response(
+     *          response    = 409,
+     *          description = "`Conflict`: cuestionesIdcuestion does not exist.",
+     *          @OA\JsonContent(
+     *              ref  = "#/components/schemas/Message",
+     *              example          = {
+     *                   "code"      = 409,
+     *                   "message"   = "`Conflict`: cuestionesIdcuestion does not exist."
+     *              }
+     *         )
+     * )
+     * )
+     * @param Request $request
+     * @param Response $response
+     * @return Response
+     */
+     public function post(Request $request, Response $response): Response
+    {
+        if (!$this->jwt->isMaestro) {
+            
+            
+            return Error::error($this->container, $request, $response, StatusCode::HTTP_FORBIDDEN);
+        }
+        $req_data = $request ->getParsedBody() ?? json_decode($request->getBody(),true);
+        $entity_manager = Utils::getEntityManager();
+        
+        //comprobar que la cuestion existe y tengo derecho sobre ella.
+        
+        $cuestion = $entity_manager->
+            getRepository(Cuestion::class)->
+            findOneBy(['idCuestion' => $req_data['cuestionesIdcuestion']]);
+        
+        //la cuestion no existe
+        if($cuestion===null ){
+            return Error::error($this->container, $request, $response, StatusCode::HTTP_CONFLICT);
+        }
+        //no tengo derecho sobre la cuestion
+        if($cuestion->getCreador()!==null && $cuestion->getCreador()->getId()!==$this->jwt->user_id){
+            return Error::error($this->container, $request, $response, StatusCode::HTTP_FORBIDDEN);
         }
 
+        $solucionIgual = $entity_manager ->getRepository(Soluciones::class)->findOneBy(['descripcion'=>$req_data['descripcion']]);
+            //no pueden haber dos soluciones con la misma descripcion
+            if(null!==$solucionIgual){
+                return Error::error($this->container, $request, $response, StatusCode::HTTP_BAD_REQUEST);
+            }
+        //si no le pasa los parametros necesarios
+        if(!isset($req_data['descripcion']) || !isset($req_data['cuestionesIdcuestion'])){
+            return Error::error($this->container, $request, $response, StatusCode::HTTP_BAD_REQUEST);
+        }
+        $solucion = new Soluciones(
+            $req_data['descripcion'],
+            $req_data['correcta'] ?? false,
+            $req_data['cuestionesIdcuestion']
+        );
+        if(isset($req_data['correcta'])){
+            if($req_data['correcta']===true){
+                $solucion->setCorrecta(true);
+            }
+        }
+        //validar que la descripcion sea unica
+
+         $entity_manager -> persist($solucion);
+        $entity_manager->flush();
+        $this->logger->info(
+            $request->getMethod() . ' ' . $request->getUri()->getPath(),
+            [ 'uid' => $this->jwt->user_id, 'status' => StatusCode::HTTP_CREATED ]
+        );
+
+        //201
+        return $response->withJson($solucion, StatusCode::HTTP_CREATED); // 201
+    }
     /**
      * Summary: Updates a solution
      *

@@ -270,6 +270,43 @@ paths:
       security:
         -
           TDWApiSecurity: []
+  /solutions:
+    post:
+      tags:
+        - Solutions
+      summary: 'Creates a new solution'
+      description: 'Creates a new solution'
+      operationId: tdw_post_solutions
+      requestBody:
+        description: '`Soluciones` properties to add to the system'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Solution'
+      responses:
+        '201':
+          description: '`Created`: question created'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Solution'
+        '401':
+          $ref: '#/components/responses/401_Standard_Response'
+        '403':
+          $ref: '#/components/responses/403_Forbidden_Response'
+        '409':
+          description: '`Conflict`: cuestionesIdcuestion does not exist.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+              example:
+                code: 409
+                message: '`Conflict`: cuestionesIdcuestion does not exist.'
+      security:
+        -
+          TDWApiSecurity: []
   '/solutions/{solutionId}':
     put:
       tags:
@@ -579,12 +616,9 @@ components:
       type: object
     Solution:
       required:
-        - idSoluciones
+        - descripcion
+        - cuestionesIdcuestion
       properties:
-        idSoluciones:
-          description: 'Soluciones Id'
-          type: integer
-          format: int64
         descripcion:
           description: 'Soluciones description'
           type: string
@@ -597,11 +631,9 @@ components:
           format: int64
       type: object
       example:
-        solucion:
-          idSoluciones: 805
-          descripcion: 'Solution description'
-          correcta: true
-          cuestionesIdcuestion: 7
+        descripcion: 'Solution description'
+        correcta: true
+        cuestionesIdcuestion: 7
     SolucionesData:
       properties:
         descripcion:
