@@ -85,16 +85,13 @@ class CuestionController
             
             return Error::error($this->container, $request, $response, StatusCode::HTTP_FORBIDDEN);
         }
-
         // si es admin le entrego todas las cuestiones, sino le entrego solo sus cuestiones. 
-        $cuestiones = $this->jwt->isAdmin 
+        $cuestiones = $this->jwt->isAdmin || !$this->jwt->isMaestro
             ? Utils::getEntityManager()->getREpository(Cuestion::class)
                 ->findAll()
             : Utils::getEntityManager()->getREpository(Cuestion::class)
                 ->findBy(['creador'=> $this->jwt->user_id ]);
         
-
-       
         //404
         if(0===count($cuestiones)){
            

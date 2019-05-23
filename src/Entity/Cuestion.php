@@ -107,7 +107,7 @@ class Cuestion implements \JsonSerializable
      * @ORM\OrderBy({ "idCategoria" = "ASC" })
      */
     protected $categorias;
-
+    
     /**
      * Cuestion constructor.
      *

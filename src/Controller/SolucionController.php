@@ -13,6 +13,8 @@ use Slim\Http\Response;
 use Slim\Http\StatusCode;
 use TDW\GCuest\Entity\Usuario;
 use TDW\GCuest\Entity\Cuestion;
+
+use TDW\GCuest\Entity\Soluciones;
 use TDW\GCuest\Error;
 use TDW\GCuest\Utils;
 
@@ -75,7 +77,8 @@ class SolucionController
      *     @OA\Response(
      *          response    = 404,
      *          ref         = "#/components/responses/404_Resource_Not_Found_Response"
-     *     )
+     *     ),
+     * 
      * )
      * @param Request $request
      * @param Response $response
@@ -84,33 +87,48 @@ class SolucionController
      */
     public function get(Request $request, Response $response, array $args): Response
     {
-        //403
+        //403 Forbidden
         if (0 === $this->jwt->user_id) {
             
             return Error::error($this->container, $request, $response, StatusCode::HTTP_FORBIDDEN);
         }
 
-        // //Busca la cuestion con ese ID 
-        // $cuestion =  Utils::getEntityManager()
-        //                 ->find(Cuestion::class,$args['id']);
-        
-        // //404 Si no encuentra ninguna con ese id.
-        // if(null===$cuestion){
+        $cuestion = Utils::getEntityManager()->getRepository(Cuestion::class)
+                ->findBy(['idCuestion'=> $args['id'] ]);
+        //si la cuestion no existe devuelve 409 conflict
+        if($cuestion==null){
+            return Error::error($this->container, $request, $response, StatusCode::HTTP_NOT_FOUND);
+        }
+        //El admin y los alumonos ven todas las soluciones
+        if($this->jwt ->isAdmin || !$this->jwt->isMaestro){
+            $soluciones  = Utils::getEntityManager()->getRepository(Soluciones::class)
+                ->findBy(['cuestionesIdcuestion'=> $args['id'] ]);
             
-        //     return Error::error($this->container,$request, $response, StatusCode::HTTP_NOT_FOUND);
-        // }
+        }else{
+            $creador = $cuestion.getCreador();
+            if($creador.getId()!=$this->jwt->user_id){
+                //no tiene permiso para ver esta cuestion
+                return Error::error($this->container, $request, $response, StatusCode::HTTP_FORBIDDEN);
+            }
+        }
         
-        // $this->logger->info(
-        //     $request->getMethod() . ' ' . $request->getUri()->getPath(),
-        //     [ 'uid' => $this->jwt->user_id, 'status' => StatusCode::HTTP_OK ]
-        // );
+        //404 Si no encuentra ninguna con ese id.
+        if(0===count($soluciones)){
+            
+            return Error::error($this->container,$request, $response, StatusCode::HTTP_NOT_FOUND);
+        }
+        
+        $this->logger->info(
+            $request->getMethod() . ' ' . $request->getUri()->getPath(),
+            [ 'uid' => $this->jwt->user_id, 'status' => StatusCode::HTTP_OK ]
+        );
 
-        // //200 
-        // return $response
-        //     ->withJson(
-        //         $cuestion,
-        //         StatusCode::HTTP_OK // 200
-        //     );
-         return Error::error($this->container, $request, $response, StatusCode::HTTP_NOT_IMPLEMENTED);
+        //200 
+        return $response
+            ->withJson(
+                ['soluciones' => $soluciones],
+                StatusCode::HTTP_OK // 200
+            );
+         //return Error::error($this->container, $request, $response, StatusCode::HTTP_NOT_IMPLEMENTED);
         }
 }

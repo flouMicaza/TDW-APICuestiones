@@ -17,16 +17,16 @@ use OpenApi\Annotations as OA;
  * @ORM\Table(name="soluciones", indexes={@ORM\Index(name="fk_soluciones_cuestiones_idx", columns={"cuestiones_idCuestion"})})
  * @ORM\Entity
  */
-class Soluciones
+class Soluciones implements \JsonSerializable
 {
     /**
      * @var int
      *
      * @ORM\Column(name="idsoluciones", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $idsoluciones;
+    private $idSoluciones;
 
     /**
      * @var string|null
@@ -36,9 +36,12 @@ class Soluciones
     private $descripcion;
 
     /**
-     * @var bool|null
+     * @var bool
      *
-     * @ORM\Column(name="correcta", type="boolean", nullable=true)
+     * @ORM\Column(
+     * name="correcta",
+     * type="boolean",
+     * options={ "default"=false })
      */
     private $correcta;
 
@@ -48,7 +51,71 @@ class Soluciones
      * @ORM\Column(name="cuestiones_idCuestion", type="integer", nullable=false)
      */
     private $cuestionesIdcuestion;
+    
+        /**
+     * Cuestion constructor.
+     *
+     * @param string  $descripcion
+     * @param bool $correcta
+     * @param int  $cuestionesIdcuestion
+     *
+     * @throws \Doctrine\ORM\ORMException
+     */
+        public function __construct(
+        string $descripcion,
+        bool $correcta,
+        int $cuestionesIdcuestion
+    ) {
+        $this->idSoluciones = 0;
+        $this->descripcion = $descripcion;
+        $this->cuestionIdcuestion = $cuestionesIdcuestion;
+    }
 
+    public function getIdSolucion(){
+        return $this->idSoluciones;
+    }
+    public function getDescription(){
+        return $this->descripcion;
+    }
+    public function isCorrecta(){
+        return $this->correcta;
+    }
+    public function getIdCuestion(){
+        return $this->cuestionesIdcuestion;
+    }
+        /**
+     * The __toString method allows a class to decide how it will react when it is converted to a string.
+     *
+     * @return string
+     * @link http://php.net/manual/en/language.oop5.magic.php#language.oop5.magic.tostring
+     */
+    public function __toString()
+    {
+        return '[ cuestion ' .
+            '(idSoluciones=' . $this->getIdSolucion() . ', ' .
+            'descripcion="' . $this->getDescription() . '", ' .
+            'correcta=' . (int) $this->isCorrecta() . ', ' .
+            'cuestionesIdcuestion=' . (int)$this->getIdCuestion() . ', ' .
+            ') ]';
+    }
+    /**
+     * Specify data which should be serialized to JSON
+     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     * @since 5.4.0
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'soluciones' => [
+                'idsoluciones' => $this->getIdSolucion(),
+                'descripcion' => $this->getDescription(),
+                'correcta' => $this->isCorrecta(),
+                'cuestionesIdcuestion' => $this->getIdCuestion(),
+            ]
+        ];
+    }
 
 }
 /**
