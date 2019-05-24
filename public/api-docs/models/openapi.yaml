@@ -318,6 +318,34 @@ paths:
       security:
         -
           TDWApiSecurity: []
+  '/propuestasolucion/{questionId}':
+    get:
+      tags:
+        - PropuestaSolucion
+      summary: 'Returns an array of propuestaSolucion based on a single questionID'
+      description: 'Returns the array of propuestaSolucion identified by `questionId`.'
+      operationId: tdw_propuestasget_propuestaSolucion
+      parameters:
+        -
+          $ref: '#/components/parameters/questionId'
+        -
+          $ref: '#/components/parameters/questionId'
+      responses:
+        '200':
+          description: 'Propuesta solucion '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PropuestaSolucionArray'
+        '401':
+          $ref: '#/components/responses/401_Standard_Response'
+        '403':
+          $ref: '#/components/responses/403_Forbidden_Response'
+        '404':
+          $ref: '#/components/responses/404_Resource_Not_Found_Response'
+      security:
+        -
+          TDWApiSecurity: []
   '/propuestasolucion/{propuestaSolucionId}':
     put:
       tags:
@@ -827,6 +855,14 @@ components:
           description: 'propuesta solucion parent solution'
           type: integer
           format: int64
+      type: object
+    PropuestaSolucionArray:
+      properties:
+        propuestaSolucion:
+          description: 'PropuestaSolucion array'
+          type: array
+          items:
+            $ref: '#/components/schemas/PropuestaSolucion'
       type: object
     Solution:
       required:

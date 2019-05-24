@@ -289,3 +289,19 @@ class PropuestaSolucion implements \JsonSerializable
  *     
  * )
  */
+
+ /**
+ * PropuestaSolucion array definition
+ *
+ * @OA\Schema(
+ *     schema           = "PropuestaSolucionArray",
+ *     @OA\Property(
+ *          property    = "propuestaSolucion",
+ *          description = "PropuestaSolucion array",
+ *          type        = "array",
+ *          @OA\Items(
+ *              ref     = "#/components/schemas/PropuestaSolucion"
+ *          )
+ *     )
+ * )
+ */

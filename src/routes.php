@@ -180,6 +180,10 @@ $app->get(
     $_ENV[RUTA_API]. PropuestaSolucionController::PATH_PROPUESTASOLUCION.'/{idu:[0-9]+}/{idc:[0-9]+}',
     PropuestaSolucionController::class . ':get'
 )->setName('tdw_get_propuestaSolucion');
+$app->get(
+    $_ENV[RUTA_API]. PropuestaSolucionController::PATH_PROPUESTASOLUCION.'/{id:[0-9]+}',
+    PropuestaSolucionController::class . ':propuestasget'
+)->setName('tdw_propuestasget_propuestaSolucion');
 $app->put(
     $_ENV[RUTA_API]. PropuestaSolucionController::PATH_PROPUESTASOLUCION.'/{id:[0-9]+}',
     PropuestaSolucionController::class . ':put'
