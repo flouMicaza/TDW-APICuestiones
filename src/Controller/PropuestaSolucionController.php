@@ -25,7 +25,7 @@ use TDW\GCuest\Utils;
 class PropuestaSolucionController
 {
     /** @var string ruta api gestión cuestiones  */
-    public const PATH_USUARIOS = '/propuestasolucion';
+    public const PATH_PROPUESTASOLUCION = '/propuestasolucion';
 
     /** @var ContainerInterface $container */
     protected $container;
@@ -151,4 +151,80 @@ class PropuestaSolucionController
         //201
         return $response->withJson($propuesta, StatusCode::HTTP_CREATED); // 201
     }
+
+    /**
+     * Summary: Returns a propuestaSolucion based on a single user ID and question ID
+     *
+     * @OA\Get(
+     *     path        = "/propuestasolucion/{userId}/{questionId}",
+     *     tags        = { "PropuestaSolucion" },
+     *     summary     = "Returns a question based on a single ID",
+     *     description = "Returns the propuestaSolucion identified by `questionId` and `userId`.",
+     *     operationId = "tdw_get_propuestaSolucion",
+     *     @OA\Parameter(
+     *          ref    = "#/components/parameters/questionId",
+     *          
+     *     ),
+     * @OA\Parameter(
+     * ref =  "#/components/parameters/userId"),
+     *     security    = {
+     *          { "TDWApiSecurity": {} }
+     *     },
+     *     @OA\Response(
+     *          response    = 200,
+     *          description = "Propuesta solucion ",
+     *          @OA\JsonContent(
+     *              ref  = "#/components/schemas/PropuestaSolucion"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *          response    = 401,
+     *          ref         = "#/components/responses/401_Standard_Response"
+     *     ),
+     *     @OA\Response(
+     *          response    = 403,
+     *          ref         = "#/components/responses/403_Forbidden_Response"
+     *     ),
+     *     @OA\Response(
+     *          response    = 404,
+     *          ref         = "#/components/responses/404_Resource_Not_Found_Response"
+     *     )
+     * )
+     * @param Request $request
+     * @param Response $response
+     * @param array $args
+     * @return Response
+     */
+
+    public function get(Request $request, Response $response, array $args): Response
+    {
+        //403
+        if (0 === $this->jwt->user_id) {
+            
+            return Error::error($this->container, $request, $response, StatusCode::HTTP_FORBIDDEN);
+        }
+
+        //revisar que exista una solucion para esa cuestion hcha por ese usuario 
+        $propuestaSolucion = Utils::getEntityManager()->getRepository(PropuestaSolucion::class)
+                ->findOneBy(['cuestionesIdcuestion'=> $args['idc'],'usuariosId'=>$args['idu'] ]);
+        
+        //aun no responde
+        if($propuestaSolucion==null){
+            return Error::error($this->container, $request, $response, StatusCode::HTTP_NOT_FOUND);
+        }
+        $this->logger->info(
+            $request->getMethod() . ' ' . $request->getUri()->getPath(),
+            [ 'uid' => $this->jwt->user_id, 'status' => StatusCode::HTTP_OK ]
+        );
+
+        //200 
+        return $response
+            ->withJson(
+                ['propuestaSolucion' => $propuestaSolucion],
+                StatusCode::HTTP_OK // 200
+            );
+    }
+
+
+
 }

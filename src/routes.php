@@ -173,6 +173,10 @@ $app->delete(
 */
 // POST: Creates a new propuestaSolucion
 $app->post(
-    $_ENV['RUTA_API'] . '/propuestasolucion',
+    $_ENV['RUTA_API'] . PropuestaSolucionController::PATH_PROPUESTASOLUCION,
     PropuestaSolucionController::class . ':post'
 )->setName('tdw_post_propuestaSolucion');
+$app->get(
+    $_ENV[RUTA_API]. PropuestaSolucionController::PATH_PROPUESTASOLUCION.'/{idu:[0-9]+}/{idc:[0-9]+}',
+    PropuestaSolucionController::class . ':get'
+)->setName('tdw_get_propuestaSolucion');

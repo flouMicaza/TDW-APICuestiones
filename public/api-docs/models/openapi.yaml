@@ -290,6 +290,34 @@ paths:
       security:
         -
           TDWApiSecurity: []
+  '/propuestasolucion/{userId}/{questionId}':
+    get:
+      tags:
+        - PropuestaSolucion
+      summary: 'Returns a question based on a single ID'
+      description: 'Returns the propuestaSolucion identified by `questionId` and `userId`.'
+      operationId: tdw_get_propuestaSolucion
+      parameters:
+        -
+          $ref: '#/components/parameters/questionId'
+        -
+          $ref: '#/components/parameters/userId'
+      responses:
+        '200':
+          description: 'Propuesta solucion '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PropuestaSolucion'
+        '401':
+          $ref: '#/components/responses/401_Standard_Response'
+        '403':
+          $ref: '#/components/responses/403_Forbidden_Response'
+        '404':
+          $ref: '#/components/responses/404_Resource_Not_Found_Response'
+      security:
+        -
+          TDWApiSecurity: []
   '/solutions/{questionId}':
     get:
       tags:
