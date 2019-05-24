@@ -279,14 +279,14 @@ paths:
         '403':
           $ref: '#/components/responses/403_Forbidden_Response'
         '409':
-          description: '`Conflict`: solucionesIdsoluciones does not exist.'
+          description: '`Conflict`: cuestionesIdcuestion does not exist.'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Message'
               example:
                 code: 409
-                message: '`Conflict`: solucionesIdsoluciones does not exist.'
+                message: '`Conflict`: cuestionesIdcuestion does not exist.'
       security:
         -
           TDWApiSecurity: []
@@ -724,7 +724,7 @@ components:
     PropuestaSolucion:
       required:
         - descripcion
-        - solucionesIdsoluciones
+        - cuestionesIdcuestion
         - usuariosId
       properties:
         idPropuestaSolucion:
@@ -739,7 +739,7 @@ components:
         error:
           description: 'Propuesta solucion error'
           type: string
-        solucionesIdsoluciones:
+        cuestionesIdcuestion:
           description: 'propuesta solucion parent solution'
           type: integer
           format: int64
@@ -751,12 +751,12 @@ components:
     PropuestaSolucionData:
       required:
         - descripcion
-        - solucionesIdsoluciones
+        - cuestionesIdcuestion
       properties:
         descripcion:
           description: 'Propuesta solucion description'
           type: string
-        solucionesIdsoluciones:
+        cuestionesIdcuestion:
           description: 'propuesta solucion parent solution'
           type: integer
           format: int64

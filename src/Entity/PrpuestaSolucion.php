@@ -14,7 +14,7 @@ use OpenApi\Annotations as OA;
 /**
  * PrpuestaSolucion
  *
- * @ORM\Table(name="prpuesta_solucion", indexes={@ORM\Index(name="fk_prpuesta_solucion_soluciones1_idx", columns={"soluciones_idsoluciones"}), @ORM\Index(name="fk_prpuesta_solucion_usuarios1_idx", columns={"usuarios_id"})})
+ * @ORM\Table(name="prpuesta_solucion", indexes={@ORM\Index(name="fk_propuesta_solucion_cuestiones_idx", columns={"soluciones_idsoluciones"}), @ORM\Index(name="fk_prpuesta_solucion_usuarios1_idx", columns={"usuarios_id"})})
  * @ORM\Entity
  */
 class PropuestaSolucion implements \JsonSerializable
@@ -54,7 +54,7 @@ class PropuestaSolucion implements \JsonSerializable
      *
      * @ORM\Column(name="soluciones_idsoluciones", type="integer", nullable=false)
      */
-    private $solucionesIdsoluciones;
+    private $cuestionesIdcuestion;
 
     /**
      * @var int
@@ -69,21 +69,21 @@ class PropuestaSolucion implements \JsonSerializable
      * @param string  $descripcion
      * @param bool $correcta
      * @param string  $error
-     * @param int  $solucionesIdsoluciones
+     * @param int  $cuestionesIdcuestion
      * @param int  $usuariosId
      *
      * @throws \Doctrine\ORM\ORMException
      */
     public function __construct(
         string $descripcion,
-        int $solucionesIdsoluciones,
+        int $cuestionesIdcuestion,
         int $usuariosId
     ) {
         $this->idpropuestaSolucion = 0;
         $this->descripcion = $descripcion;
         $this->correcta = null;
         $this->error = null;
-        $this->solucionesIdsoluciones = $solucionesIdsoluciones;
+        $this->cuestionesIdcuestion = $cuestionesIdcuestion;
         $this->usuariosId = $usuariosId;
     }
  /**
@@ -114,7 +114,7 @@ class PropuestaSolucion implements \JsonSerializable
      * @return int
      */
     public function getIdSolucion(){
-        return $this->solucionesIdsoluciones;
+        return $this->cuestionesIdcuestion;
     }
     /**
      * @return int
@@ -162,7 +162,7 @@ class PropuestaSolucion implements \JsonSerializable
             'descripcion="' . $this->getDescription() . '", ' .
             'correcta=' . (int) $this->isCorrecta() . ', ' .
             'error=' . $this->getError() . ', ' .
-            'solucionesIdsoluciones=' . (int)$this->getIdSolucion() . ', ' .
+            'cuestionesIdcuestion=' . (int)$this->getIdSolucion() . ', ' .
 
             'usuariosId=' . (int)$this->getIdUsuario() . ', ' .
             ') ]';
@@ -183,7 +183,7 @@ class PropuestaSolucion implements \JsonSerializable
                 'descripcion' => $this->getDescription(),
                 'correcta' => $this->isCorrecta(),
                 'error' => $this->getError(),
-                'solucionesIdsoluciones' => $this->getIdPropuestaSolucion(),
+                'cuestionesIdcuestion' => $this->getIdPropuestaSolucion(),
                 'usuariosId' => $this->getIdUsuario()
             ]
         ];
@@ -196,7 +196,7 @@ class PropuestaSolucion implements \JsonSerializable
  * @OA\Schema(
  *     schema = "PropuestaSolucion",
  *     type   = "object",
- *     required = { "descripcion","solucionesIdsoluciones", "usuariosId"},
+ *     required = { "descripcion","cuestionesIdcuestion", "usuariosId"},
  *     
  *     @OA\Property(
  *          property    = "idPropuestaSolucion",
@@ -219,7 +219,7 @@ class PropuestaSolucion implements \JsonSerializable
  *          type        = "string"
  *      ),
  *      @OA\Property(
- *          property    = "solucionesIdsoluciones",
+ *          property    = "cuestionesIdcuestion",
  *          description = "propuesta solucion parent solution",
  *          format      = "int64",
  *          type        = "integer"
@@ -237,7 +237,7 @@ class PropuestaSolucion implements \JsonSerializable
  *              "descripcion" = "Solution description",
  *              "correcta"  = true,
  *              "error" = "Corrección del maestro",
- *              "solucionesIdsoluciones" = 7,
+ *              "cuestionesIdcuestion" = 7,
  *              "usuariosId" = 3
  *          }
  *     
@@ -250,7 +250,7 @@ class PropuestaSolucion implements \JsonSerializable
  * @OA\Schema(
  *     schema = "PropuestaSolucionData",
  *     type   = "object",
- *     required = { "descripcion","solucionesIdsoluciones"},
+ *     required = { "descripcion","cuestionesIdcuestion"},
  *     
  *    
  *      @OA\Property(
@@ -260,7 +260,7 @@ class PropuestaSolucion implements \JsonSerializable
  *      ),
  *      
  * @OA\Property(
- *          property    = "solucionesIdsoluciones",
+ *          property    = "cuestionesIdcuestion",
  *          description = "propuesta solucion parent solution",
  *          format      = "int64",
  *          type        = "integer"

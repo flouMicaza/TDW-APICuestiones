@@ -12,8 +12,9 @@ use Slim\Http\Request;
 use Slim\Http\Response;
 use Slim\Http\StatusCode;
 use TDW\GCuest\Entity\Usuario;
-use TDW\GCuest\Entity\Soluciones;
 use TDW\GCuest\Entity\PropuestaSolucion;
+
+use TDW\GCuest\Entity\Cuestion;
 
 use TDW\GCuest\Error;
 use TDW\GCuest\Utils;
@@ -89,12 +90,12 @@ class PropuestaSolucionController
      *     ),
      *     @OA\Response(
      *          response    = 409,
-     *          description = "`Conflict`: solucionesIdsoluciones does not exist.",
+     *          description = "`Conflict`: cuestionesIdcuestion does not exist.",
      *          @OA\JsonContent(
      *              ref  = "#/components/schemas/Message",
      *              example          = {
      *                   "code"      = 409,
-     *                   "message"   = "`Conflict`: solucionesIdsoluciones does not exist."
+     *                   "message"   = "`Conflict`: cuestionesIdcuestion does not exist."
      *              }
      *         )
      * )
@@ -116,27 +117,27 @@ class PropuestaSolucionController
         //buscar que no haya una propuesta por ese mismo usuario y para esa misma solucion. 
         $propuestaIgual = $entity_manager-> 
             getRepository(PropuestaSolucion::class)->
-            findOneBy(['usuariosId'=>$this->jwt->user_id,'solucionesIdsoluciones'=>$req_data['solucionesIdsoluciones']]);
+            findOneBy(['usuariosId'=>$this->jwt->user_id,'cuestionesIdcuestion'=>$req_data['cuestionesIdcuestion']]);
         
         if($propuestaIgual!=null){
             return Error::error($this->container, $request, $response, StatusCode::HTTP_BAD_REQUEST);
         }
-        if(!isset($req_data['descripcion']) || !isset($req_data['solucionesIdsoluciones'])){
+        if(!isset($req_data['descripcion']) || !isset($req_data['cuestionesIdcuestion'])){
             
             return Error::error($this->container, $request, $response, StatusCode::HTTP_BAD_REQUEST);
         }
 
         //verifico que la solucion existe si no existe tiro 409.
         $solucion = $entity_manager-> 
-            getRepository(Soluciones::class)->
-            findOneBy(['idSoluciones'=>$req_data['solucionesIdsoluciones']]);
+            getRepository(Cuestion::class)->
+            findOneBy(['idCuestion'=>$req_data['cuestionesIdcuestion']]);
         if($solucion==null){
             return Error::error($this->container, $request, $response, StatusCode::HTTP_CONFLICT);
         }
 
         $propuesta = new PropuestaSolucion(
             $req_data['descripcion'],
-            $req_data['solucionesIdsoluciones'],
+            $req_data['cuestionesIdcuestion'],
             $this->jwt->user_id
         );
 
