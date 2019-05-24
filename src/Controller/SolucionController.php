@@ -145,7 +145,7 @@ class SolucionController
      *         description = "`Soluciones` properties to add to the system",
      *         required    = true,
      *         @OA\JsonContent(
-     *             ref = "#/components/schemas/Solution"
+     *             ref = "#/components/schemas/SolucionesData"
      *         )
      *     ),
      *     security    = {
@@ -153,7 +153,7 @@ class SolucionController
      *     },
      *     @OA\Response(
      *          response    = 201,
-     *          description = "`Created`: question created",
+     *          description = "`Created`: solution created",
      *          @OA\JsonContent(
      *              ref  = "#/components/schemas/Solution"
      *         )
@@ -274,9 +274,9 @@ class SolucionController
      *    
      *     @OA\Response(
      *          response    = 209,
-     *          description = "`Content Returned`: question previously existed and is now updated",
+     *          description = "`Content Returned`: solution previously existed and is now updated",
      *          @OA\JsonContent(
-     *              ref = "#/components/schemas/Question"
+     *              ref = "#/components/schemas/Solution"
      *         )
      *     ),
      * @OA\Response(

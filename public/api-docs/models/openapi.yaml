@@ -244,6 +244,52 @@ paths:
                 token: '<JSON web token>'
         '404':
           $ref: '#/components/responses/404_Resource_Not_Found_Response'
+  /propuestasolucion:
+    post:
+      tags:
+        - PropuestaSolucion
+      summary: 'Creates a new propuesta de solucion'
+      description: 'Creates a new propuesta de solucion'
+      operationId: tdw_post_propuestaSolucion
+      requestBody:
+        description: '`PropuestaSolucion` properties to add to the system'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PropuestaSolucionData'
+      responses:
+        '201':
+          description: '`Created`: propuestaSolucion created'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PropuestaSolucion'
+        '400':
+          description: '`Bad Request`:insert valid data'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+              example:
+                code: 400
+                message: '`Bad Request`: insert valid data'
+        '401':
+          $ref: '#/components/responses/401_Standard_Response'
+        '403':
+          $ref: '#/components/responses/403_Forbidden_Response'
+        '409':
+          description: '`Conflict`: solucionesIdsoluciones does not exist.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+              example:
+                code: 409
+                message: '`Conflict`: solucionesIdsoluciones does not exist.'
+      security:
+        -
+          TDWApiSecurity: []
   '/solutions/{questionId}':
     get:
       tags:
@@ -283,10 +329,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Solution'
+              $ref: '#/components/schemas/SolucionesData'
       responses:
         '201':
-          description: '`Created`: question created'
+          description: '`Created`: solution created'
           content:
             application/json:
               schema:
@@ -349,11 +395,11 @@ paths:
               $ref: '#/components/schemas/SolucionesData'
       responses:
         '209':
-          description: '`Content Returned`: question previously existed and is now updated'
+          description: '`Content Returned`: solution previously existed and is now updated'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Question'
+                $ref: '#/components/schemas/Solution'
         '400':
           description: '`Bad Request`:insert valid data'
           content:
@@ -675,34 +721,54 @@ components:
           items:
             $ref: '#/components/schemas/Question'
       type: object
-    Solution:
+    PropuestaSolucion:
       required:
         - descripcion
-        - cuestionesIdcuestion
+        - solucionesIdsoluciones
+        - usuariosId
       properties:
+        idPropuestaSolucion:
+          description: 'Propuesta solucion id'
+          type: integer
         descripcion:
-          description: 'Soluciones description'
+          description: 'Propuesta solucion description'
           type: string
         correcta:
-          description: 'Denotes if solution is correct'
+          description: 'Denotes if propuesta de solucion is correct'
           type: boolean
-        cuestionesIdcuestion:
-          description: 'Solutions parent question'
+        error:
+          description: 'Propuesta solucion error'
+          type: string
+        solucionesIdsoluciones:
+          description: 'propuesta solucion parent solution'
+          type: integer
+          format: int64
+        usuariosId:
+          description: 'user who created propuesta solucion'
           type: integer
           format: int64
       type: object
-      example:
-        descripcion: 'Solution description'
-        correcta: true
-        cuestionesIdcuestion: 7
-    SolutionGet:
+    PropuestaSolucionData:
+      required:
+        - descripcion
+        - solucionesIdsoluciones
+      properties:
+        descripcion:
+          description: 'Propuesta solucion description'
+          type: string
+        solucionesIdsoluciones:
+          description: 'propuesta solucion parent solution'
+          type: integer
+          format: int64
+      type: object
+    Solution:
       required:
         - descripcion
         - cuestionesIdcuestion
       properties:
         idSoluciones:
           description: 'Soluciones id'
-          type: int
+          type: integer
         descripcion:
           description: 'Soluciones description'
           type: string
@@ -714,11 +780,6 @@ components:
           type: integer
           format: int64
       type: object
-      example:
-        idSolution: 5
-        descripcion: 'Solution description'
-        correcta: true
-        cuestionesIdcuestion: 7
     SolucionesData:
       properties:
         descripcion:

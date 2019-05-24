@@ -12,6 +12,8 @@ use TDW\GCuest\Controller\LoginController;
 use TDW\GCuest\Controller\UsuarioController;
 use TDW\GCuest\Controller\SolucionController;
 
+use TDW\GCuest\Controller\PropuestaSolucionController;
+
 /**
  * @var \Slim\App $app
  */
@@ -162,3 +164,15 @@ $app->delete(
     $_ENV['RUTA_API'] . '/solutions/{id:[0-9]+}',
     SolucionController::class . ':delete'
 )->setName('tdw_delete_solutions');
+
+
+/**
+ * ############################################################
+ * propuestaSolucion routes
+ * ############################################################
+*/
+// POST: Creates a new propuestaSolucion
+$app->post(
+    $_ENV['RUTA_API'] . '/propuestasolucion',
+    PropuestaSolucionController::class . ':post'
+)->setName('tdw_post_propuestaSolucion');

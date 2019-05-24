@@ -114,7 +114,7 @@ class Soluciones implements \JsonSerializable
         $this->correcta = $correcta;
         return $this;
     }
-        /**
+    /**
      * The __toString method allows a class to decide how it will react when it is converted to a string.
      *
      * @return string
@@ -122,8 +122,8 @@ class Soluciones implements \JsonSerializable
      */
     public function __toString()
     {
-        return '[ cuestion ' .
-            '(idSoluciones=' . $this->getIdSolucion() . ', ' .
+        return '[ solucion ' .
+            '(idSoluciones=' .(int) $this->getIdSolucion() . ', ' .
             'descripcion="' . $this->getDescription() . '", ' .
             'correcta=' . (int) $this->isCorrecta() . ', ' .
             'cuestionesIdcuestion=' . (int)$this->getIdCuestion() . ', ' .
@@ -157,6 +157,11 @@ class Soluciones implements \JsonSerializable
  *     type   = "object",
  *     required = { "descripcion","cuestionesIdcuestion" },
  *     
+ *     @OA\Property(
+ *          property    = "idSoluciones",
+ *          description = "Soluciones id",
+ *          type        = "integer"
+ *      ),
  *      @OA\Property(
  *          property    = "descripcion",
  *          description = "Soluciones description",
@@ -172,12 +177,14 @@ class Soluciones implements \JsonSerializable
  *          description = "Solutions parent question",
  *          format      = "int64",
  *          type        = "integer"
- *      ),
+ *      )
+ * )
  *      
  *      example = {
+ *              "idSoluciones" = 3,
  *              "descripcion" = "Solution description",
  *              "correcta"  = true,
- *              "cuestionesIdcuestion"              = 7
+ *              "cuestionesIdcuestion" = 7
  *          }
  *     
  * )
