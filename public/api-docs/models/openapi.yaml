@@ -695,6 +695,30 @@ components:
         descripcion: 'Solution description'
         correcta: true
         cuestionesIdcuestion: 7
+    SolutionGet:
+      required:
+        - descripcion
+        - cuestionesIdcuestion
+      properties:
+        idSoluciones:
+          description: 'Soluciones id'
+          type: int
+        descripcion:
+          description: 'Soluciones description'
+          type: string
+        correcta:
+          description: 'Denotes if solution is correct'
+          type: boolean
+        cuestionesIdcuestion:
+          description: 'Solutions parent question'
+          type: integer
+          format: int64
+      type: object
+      example:
+        idSolution: 5
+        descripcion: 'Solution description'
+        correcta: true
+        cuestionesIdcuestion: 7
     SolucionesData:
       properties:
         descripcion:
