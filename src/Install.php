@@ -54,7 +54,30 @@ class Install
             $_ENV['ADMIN_USER_PASSWD'],
             true
         );
-
+        Utils::loadUserData(
+            "m",
+            "m@upm.es",
+            "m",
+            true
+        );
+        Utils::loadUserData(
+            "a",
+            "a@upm.es",
+            "a",
+            false
+        );
+        Utils::loadUserData(
+            "b",
+            "b@upm.es",
+            "b",
+            false
+        );
+        Utils::loadUserData(
+            "c",
+            "c@upm.es",
+            "c",
+            false
+        );
         return true;
     }
 }
