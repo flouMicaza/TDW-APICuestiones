@@ -349,6 +349,77 @@ class SolucionController
             ->withStatus(209, 'Content Returned');
     
     }
+ /**
+     * Summary: Deletes a solution
+     *
+     * @OA\Delete(
+     *     path        = "/solutions/{solutionId}",
+     *     tags        = { "Solutions" },
+     *     summary     = "Deletes a solution",
+     *     description = "Deletes the solution identified by `solutionId`.",
+     *     operationId = "tdw_delete_solutions",
+     *     parameters={
+     *          { "$ref" = "#/components/parameters/solutionId" }
+     *     },
+     *     security    = {
+     *          { "TDWApiSecurity": {} }
+     *     },
+     *     @OA\Response(
+     *          response    = 204,
+     *          description = "Solution deleted &lt;Response body is empty&gt;"
+     *     ),
+     *     @OA\Response(
+     *          response    = 401,
+     *          ref         = "#/components/responses/401_Standard_Response"
+     *     ),
+     *     @OA\Response(
+     *          response    = 403,
+     *          ref         = "#/components/responses/403_Forbidden_Response"
+     *     ),
+     *     @OA\Response(
+     *          response    = 404,
+     *          ref         = "#/components/responses/404_Resource_Not_Found_Response"
+     *     )
+     * )
+     * @param Request $request
+     * @param Response $response
+     * @param array $args
+     * @return Response
+     */
+     public function delete(Request $request, Response $response, array $args): Response
+    {
+        //Si no es maestro no puede acceder.
+        if (!$this->jwt->isMaestro) { // 403
+            
+            return Error::error($this->container, $request, $response, StatusCode::HTTP_FORBIDDEN);
+        }
+
+        //Busco  la cuestion con ese id. 
+        $entity_manager = Utils::getEntityManager();
+        $solution =  $entity_manager
+                        ->find(Soluciones::class,$args['id']);
+        
+        //404 si no encuentra la cuestion
+        if(null===$solution){
+            
+            return Error::error($this->container, $request, $response, StatusCode::HTTP_NOT_FOUND);
+        }
+
+        $this->logger->info(
+            $request->getMethod() . ' ' . $request->getUri()->getPath(),
+            [
+                'uid' => $this->jwt->user_id,
+                'status' => StatusCode::HTTP_NO_CONTENT
+            ]
+        );
+        $entity_manager->remove($solution);
+        //TODO: hacer remove de todos los razonamientos que dependen de el y las propuestas y eso
+        $entity_manager->flush();
+        
+        //la cuestion no existe
+        return $response->withStatus(StatusCode::HTTP_NO_CONTENT);  // 204
+    }
+
     /**
      * Summary: Provides the list of HTTP supported methods
      *

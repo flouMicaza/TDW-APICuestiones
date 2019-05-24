@@ -372,6 +372,27 @@ paths:
       security:
         -
           TDWApiSecurity: []
+    delete:
+      tags:
+        - Solutions
+      summary: 'Deletes a solution'
+      description: 'Deletes the solution identified by `solutionId`.'
+      operationId: tdw_delete_solutions
+      parameters:
+        -
+          $ref: '#/components/parameters/solutionId'
+      responses:
+        '204':
+          description: 'Solution deleted &lt;Response body is empty&gt;'
+        '401':
+          $ref: '#/components/responses/401_Standard_Response'
+        '403':
+          $ref: '#/components/responses/403_Forbidden_Response'
+        '404':
+          $ref: '#/components/responses/404_Resource_Not_Found_Response'
+      security:
+        -
+          TDWApiSecurity: []
     options:
       tags:
         - Solutions

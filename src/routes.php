@@ -152,3 +152,13 @@ $app->put(
     $_ENV['RUTA_API'] . '/solutions/{id:[0-9]+}',
     SolucionController::class . ':put'
 )->setName('tdw_put_solutions');
+// OPTIONS: Provides the list of HTTP supported methods
+$app->options(
+    $_ENV['RUTA_API'] . '/solutions[/{id:[0-9]+}]',
+    SolucionController::class . ':options'
+)->setName('tdw_options_solutions');
+// DELETE: Deletes a question
+$app->delete(
+    $_ENV['RUTA_API'] . '/solutions/{id:[0-9]+}',
+    SolucionController::class . ':delete'
+)->setName('tdw_delete_solutions');
