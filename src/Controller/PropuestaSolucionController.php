@@ -220,11 +220,98 @@ class PropuestaSolucionController
         //200 
         return $response
             ->withJson(
-                ['propuestaSolucion' => $propuestaSolucion],
+                $propuestaSolucion,
                 StatusCode::HTTP_OK // 200
             );
     }
+ /**
+     * Summary: Updates a solution
+     *
+     * @OA\Put(
+     *     path        = "/propuestasolucion/{propuestaSolucionId}",
+     *     tags        = { "PropuestaSolucion" },
+     *     summary     = "Updates a propuestaSolution",
+     *     description = "Updates the propuestaSolution identified by `propuestaSolucionId`.",
+     *     operationId = "tdw_put_propuestaSolutions",
+     *     @OA\Parameter(
+     *          ref    = "#/components/parameters/propuestaSolucionId"
+     *     ),
+     *     @OA\RequestBody(
+     *         description = "`Solution` data to update",
+     *         required    = true,
+     *         @OA\JsonContent(
+     *             ref = "#/components/schemas/PropuestaSolucionData"
+     *         )
+     *     ),
+     *     security    = {
+     *          { "TDWApiSecurity": {} }
+     *     },
+     *    
+     *     @OA\Response(
+     *          response    = 209,
+     *          description = "`Content Returned`: solution previously existed and is now updated",
+     *          @OA\JsonContent(
+     *              ref = "#/components/schemas/PropuestaSolucion"
+     *         )
+     *     ),
 
+     *     @OA\Response(
+     *          response    = 401,
+     *          ref         = "#/components/responses/401_Standard_Response"
+     *     ),
+     *     @OA\Response(
+     *          response    = 403,
+     *          ref         = "#/components/responses/403_Forbidden_Response"
+     *     ),
+     *     @OA\Response(
+     *          response    = 404,
+     *          ref         = "#/components/responses/404_Resource_Not_Found_Response"
+     *     ),
+     *     
+     * )
+     * @param Request $request
+     * @param Response $response
+     * @param array $args
+     * @return Response
+     */
 
+    public function put(Request $request, Response $response, array $args): Response
+    {
+        if (!$this->jwt->isMaestro) { // 403
+           
+            return Error::error($this->container, $request, $response, StatusCode::HTTP_FORBIDDEN);
+        }
 
+        $req_data
+            = $request->getParsedBody()
+            ?? json_decode($request->getBody(), true);
+
+        $entity_manager = Utils::getEntityManager();
+        
+        $propuestaSolucion = Utils::getEntityManager()->getRepository(PropuestaSolucion::class)
+                ->findOneBy(['idpropuestaSolucion'=> $args['id'] ]);
+        if($propuestaSolucion==null){
+            return Error::error($this->container, $request, $response, StatusCode::HTTP_NOT_FOUND);
+        }
+        if(isset($req_data['descripcion'])){         
+            $propuestaSolucion->setDescripcion($req_data['descripcion']);
+        }
+        if(isset($req_data['correcta'])){
+            $propuestaSolucion->setCorrecta($req_data['correcta']);
+        }
+        if(isset($req_data['error'])){
+           
+            $propuestaSolucion->setError($req_data['error']);
+        }
+        $entity_manager->flush();
+        $this->logger->info(
+            $request->getMethod() . ' ' . $request->getUri()->getPath(),
+            [ 'uid' => $this->jwt->user_id, 'status' => 209 ]
+        );
+
+        return $response
+            ->withJson($propuestaSolucion)
+            ->withStatus(209, 'Content Returned');
+        
+    }
 }

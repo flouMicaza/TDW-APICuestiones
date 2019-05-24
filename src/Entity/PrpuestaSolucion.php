@@ -258,7 +258,18 @@ class PropuestaSolucion implements \JsonSerializable
  *          description = "Propuesta solucion description",
  *          type        = "string"
  *      ),
- *      
+ * @OA\Property(
+ *          property    = "correcta",
+ *          description = "Propuesta solucion correcta",
+ *          type        = "boolean"
+
+ *      ),
+ *  *      @OA\Property(
+ *          property    = "error",
+ *          description = "Propuesta solucion error",
+ *          type        = "string"
+ *      ),
+
  * @OA\Property(
  *          property    = "cuestionesIdcuestion",
  *          description = "propuesta solucion parent solution",

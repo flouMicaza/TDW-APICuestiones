@@ -318,6 +318,39 @@ paths:
       security:
         -
           TDWApiSecurity: []
+  '/propuestasolucion/{propuestaSolucionId}':
+    put:
+      tags:
+        - PropuestaSolucion
+      summary: 'Updates a propuestaSolution'
+      description: 'Updates the propuestaSolution identified by `propuestaSolucionId`.'
+      operationId: tdw_put_propuestaSolutions
+      parameters:
+        -
+          $ref: '#/components/parameters/propuestaSolucionId'
+      requestBody:
+        description: '`Solution` data to update'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PropuestaSolucionData'
+      responses:
+        '209':
+          description: '`Content Returned`: solution previously existed and is now updated'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PropuestaSolucion'
+        '401':
+          $ref: '#/components/responses/401_Standard_Response'
+        '403':
+          $ref: '#/components/responses/403_Forbidden_Response'
+        '404':
+          $ref: '#/components/responses/404_Resource_Not_Found_Response'
+      security:
+        -
+          TDWApiSecurity: []
   '/solutions/{questionId}':
     get:
       tags:
@@ -784,6 +817,12 @@ components:
         descripcion:
           description: 'Propuesta solucion description'
           type: string
+        correcta:
+          description: 'Propuesta solucion correcta'
+          type: boolean
+        error:
+          description: 'Propuesta solucion error'
+          type: string
         cuestionesIdcuestion:
           description: 'propuesta solucion parent solution'
           type: integer
@@ -971,6 +1010,14 @@ components:
       name: solutionId
       in: path
       description: 'ID of solution'
+      required: true
+      schema:
+        type: integer
+        format: int64
+    propuestaSolucionId:
+      name: propuestaSolucionId
+      in: path
+      description: 'ID of propuestaSolucion'
       required: true
       schema:
         type: integer
