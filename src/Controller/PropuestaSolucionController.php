@@ -360,7 +360,7 @@ class PropuestaSolucionController
 
         $entity_manager = Utils::getEntityManager();
         
-        $propuestaSolucion = Utils::getEntityManager()->getRepository(PropuestaSolucion::class)
+        $propuestaSolucion = $entity_manager->getRepository(PropuestaSolucion::class)
                 ->findOneBy(['idpropuestaSolucion'=> $args['id'] ]);
         if($propuestaSolucion==null){
             return Error::error($this->container, $request, $response, StatusCode::HTTP_NOT_FOUND);
