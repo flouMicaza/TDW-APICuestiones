@@ -379,6 +379,32 @@ paths:
       security:
         -
           TDWApiSecurity: []
+  '/respuestasolucion/{userId}':
+    get:
+      tags:
+        - RespuestaSolucion
+      summary: 'Returns an array of respuestaSoluion based on a single user ID'
+      description: 'Returns the respuestaSolucion identified by `userId`.'
+      operationId: tdw_get_respuestaSolucion
+      parameters:
+        -
+          $ref: '#/components/parameters/userId'
+      responses:
+        '200':
+          description: 'respuesta solucion '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RespuestaSolucionArray'
+        '401':
+          $ref: '#/components/responses/401_Standard_Response'
+        '403':
+          $ref: '#/components/responses/403_Forbidden_Response'
+        '404':
+          $ref: '#/components/responses/404_Resource_Not_Found_Response'
+      security:
+        -
+          TDWApiSecurity: []
   '/solutions/{questionId}':
     get:
       tags:
@@ -863,6 +889,54 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PropuestaSolucion'
+      type: object
+    RespuestaSolucion:
+      required:
+        - descripcion
+        - cuestionesIdcuestion
+        - usuariosId
+      properties:
+        idRespuestaSolucion:
+          description: 'Respuesta solucion id'
+          type: integer
+        respuesta:
+          description: 'Denotes if respuesta de solucion is correct'
+          type: boolean
+        solucionesIdsoluciones:
+          description: 'respuesta solucion parent solution'
+          type: integer
+          format: int64
+        usuariosId:
+          description: 'user who created respuesta solucion'
+          type: integer
+          format: int64
+      type: object
+    RespuestaSolucionData:
+      required:
+        - descripcion
+        - cuestionesIdcuestion
+      properties:
+        descripcion:
+          description: 'Respuesta solucion description'
+          type: string
+        correcta:
+          description: 'Respuesta solucion correcta'
+          type: boolean
+        error:
+          description: 'Respuesta solucion error'
+          type: string
+        cuestionesIdcuestion:
+          description: 'respuesta solucion parent solution'
+          type: integer
+          format: int64
+      type: object
+    RespuestaSolucionArray:
+      properties:
+        respuestaSolucion:
+          description: 'RespuestaSolucion array'
+          type: array
+          items:
+            $ref: '#/components/schemas/RespuestaSolucion'
       type: object
     Solution:
       required:

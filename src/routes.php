@@ -11,7 +11,7 @@ use TDW\GCuest\Controller\CuestionController;
 use TDW\GCuest\Controller\LoginController;
 use TDW\GCuest\Controller\UsuarioController;
 use TDW\GCuest\Controller\SolucionController;
-
+use TDW\GCuest\Controller\RespuestaSolucionController;
 use TDW\GCuest\Controller\PropuestaSolucionController;
 
 /**
@@ -188,3 +188,13 @@ $app->put(
     $_ENV[RUTA_API]. PropuestaSolucionController::PATH_PROPUESTASOLUCION.'/{id:[0-9]+}',
     PropuestaSolucionController::class . ':put'
 )->setName('tdw_put_propuestaSolucion');
+
+/**
+ * ############################################################
+ * respuestaSolucion routes
+ * ############################################################
+*/
+$app->get(
+    $_ENV[RUTA_API]. RespuestaSolucionController::PATH_RESPUESTASOLUCION.'/{idu:[0-9]+}',
+    RespuestaSolucionController::class . ':get'
+)->setName('tdw_get_respuestaSolucion');

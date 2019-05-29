@@ -113,7 +113,7 @@ class PropuestaSolucion implements \JsonSerializable
     /**
      * @return int
      */
-    public function getIdSolucion(){
+    public function getIdCuestion(){
         return $this->cuestionesIdcuestion;
     }
     /**
@@ -162,7 +162,7 @@ class PropuestaSolucion implements \JsonSerializable
             'descripcion="' . $this->getDescription() . '", ' .
             'correcta=' . (int) $this->isCorrecta() . ', ' .
             'error=' . $this->getError() . ', ' .
-            'cuestionesIdcuestion=' . (int)$this->getIdSolucion() . ', ' .
+            'cuestionesIdcuestion=' . (int)$this->getIdCuestion() . ', ' .
 
             'usuariosId=' . (int)$this->getIdUsuario() . ', ' .
             ') ]';
