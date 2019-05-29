@@ -1,9 +1,12 @@
 function cargar_cuestion() {
+    
   var cuestion_actual = JSON.parse(
     window.localStorage.getItem("cuestion_actual")
   );
   var aprendiz = JSON.parse(window.localStorage.getItem("usuarioRegistrado"));
 
+  $("#nombre-usuario").text("Nombre usuario: " + aprendiz.username);
+    
   var div_enunciado = document.getElementById("header_enunciado");
   var boton_cerrar = document.getElementById("cerrar_cuestion");
   var nombre_cuestion = document.createElement("h3");

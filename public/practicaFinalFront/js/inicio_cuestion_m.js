@@ -1,5 +1,10 @@
 //cargar_cuestion: funcion que hace que se carguen los datos de la cuestion que hemos apretado.
 function cargar_cuestion() {
+  var usuarioActual = JSON.parse(
+    window.localStorage.getItem("usuarioRegistrado")
+  );
+  $("#nombre-usuario").text("Nombre usuario: " + usuarioActual.username);
+    
   var cuestion_actual = JSON.parse(
     window.localStorage.getItem("cuestion_actual")
   );

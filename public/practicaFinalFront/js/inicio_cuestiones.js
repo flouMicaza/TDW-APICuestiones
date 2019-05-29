@@ -1,5 +1,10 @@
 //Hacer un get a la api y traer todas las cuesiones del usuario.
 function get_cuestiones() {
+  var usuarioActual = JSON.parse(
+    window.localStorage.getItem("usuarioRegistrado")
+  );
+  $("#nombre-usuario").text("Nombre usuario: " + usuarioActual.username);
+    
   $(document).ready(function() {
     $.ajax({
       url: "/api/v1/questions",
