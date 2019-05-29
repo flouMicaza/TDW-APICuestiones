@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <title>Administrador de cuestiones</title>
+    <meta name="author" content="Florencia Miranda" />
+    <meta charset="utf-8" />
+
+    <!-- Importar bootstrap-->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="/practicaFinalFront/css/estilos.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="../js/inicio_cuestion_m.js"></script>
+  </head>
+
+  <body onload="cargar_cuestion();">
+    <nav class="navbar navbar-light navbar-expand-lg ">
+      <a class="navbar-brand" href="#">Cuestiones</a>
+      <div class="collapse navbar-collapse justify-content-end">
+        <ul class="navbar-nav">
+          <li class="nav-item active">
+            <a class="nav-link" href="login.html">
+              <!-- title hace que apareza un mensaje al pasar el mouse sobre la img-->
+              <img
+                src="../icons/build/svg/sign-out.svg"
+                width="30"
+                height="30"
+                alt="Salir"
+                title="Salir"
+              />
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container contenedor-cuestion">
+      <!-- class d-flex justify content emd permite poner el  botón para salir en el final-->
+      <div class="d-flex justify-content-end">
+        <!-- botón para salir-->
+        <a href="./inicio.html" class="close" aria-label="Close">
+          <span>&times;</span>
+        </a>
+      </div>
+      <div
+        class="alert alert-success alert-dismissible fade show"
+        style="display:none"
+        role="alert"
+        id="alertaCambioEnunciado"
+      >
+        Se ha cambiado el enunciado!
+      </div>
+      <div
+        class="alert alert-success alert-dismissible fade show"
+        style="display:none"
+        role="alert"
+        id="alertaCambioSolucion"
+      >
+        Se ha cambiado la solución!
+      </div>
+      <form action="./pagina_cuestion_profesor.html">
+        <div class="form-row">
+          <div class="col-auto">
+            <label>Enunciado</label>
+            <div class="custom-control custom-switch" id="switch_activar">
+              <input
+                type="checkbox"
+                class="custom-control-input"
+                id="activacion_cuestion"
+              />
+              <label class="custom-control-label" for="activacion_cuestion"
+                >Disponible
+              </label>
+            </div>
+          </div>
+          <div class="col-8" id="enunciado"></div>
+          <div class="col-auto">
+            <button
+              class="btn btn-primary"
+              type="button"
+              onclick="return cambio_enunciado()"
+            >
+              Cambiar enunciado
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <hr />
+
+      <main id="soluciones"></main>
+      <hr/>
+      <main id="propuestas" >
+        <div id="propuesta_tipo">
+        <div class="row">
+          <div class="col-2">
+            <label>Propuesta de solución</label>
+          </div>
+          <div class="col">
+            <p class="texto-destacado">El software es algo bien bueno</p>
+          </div>
+        </div>
+        <form>
+        <div class="form-row">
+          <div class="col-1">
+            <label>Error: </label>
+          </div>
+          <div class="col-7">
+            <textarea class="form-control" placeholder="Entregar feedback al aprendiz" cols="60"></textarea>
+          </div>
+          <div class="col-4">
+              <input type="checkbox" id="correcta">Correcta
+              <button type="button" class="btn btn-primary" onclick="corregir_propuesta(this);">Corregir propuesta</button>
+          </div>
+        </div>
+      </form>
+      <br>
+    </div>
+        </main>
+      
+      <hr/>
+      <form>
+        <div class="form-row">
+          <div class="col-auto">
+            <label>Nueva solución </label>
+          </div>
+          <!-- el input tiene required para que obligue a poner algo en la cuestion-->
+
+          <div class="col-7">
+            <textarea
+              class="form-control "
+              placeholder="Ingresar nueva solución"
+              required
+              id="nueva_solucion"
+            ></textarea>
+          </div>
+          <div class="col-auto">
+            <button
+              class="btn btn-primary"
+              type="button"
+              onclick="return agregar_solucion();"
+            >
+              Añadir solución
+            </button>
+            <small
+              id="mensaje_sol_vacia"
+              class="text-danger"
+              style="display:none"
+              >Solucion no puede ser vacía</small
+            >
+          </div>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>
