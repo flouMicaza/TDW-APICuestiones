@@ -79,6 +79,11 @@ $app->add(
                             '/api/v1/users/username'
                         ]
                     ]
+                ),
+                new JwtAuthentication\RequestPathRule(
+                    [
+                        'passthrough' => ["/api/v1/users"]
+                    ]
                 )
             ],
             'logger' => $app->getContainer()->get('logger'),

@@ -410,9 +410,7 @@ class UsuarioController
      */
     public function post(Request $request, Response $response): Response
     {
-        if (!$this->jwt->isAdmin) {
-            return Error::error($this->container, $request, $response, StatusCode::HTTP_FORBIDDEN);
-        }
+        
 
         $req_data
             = $request->getParsedBody()
