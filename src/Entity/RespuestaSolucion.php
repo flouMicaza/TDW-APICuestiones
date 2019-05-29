@@ -53,20 +53,20 @@ class RespuestaSolucion implements \JsonSerializable
      * RespuestaSolucion constructor.
      *
      * @param bool $respuesta
-     * @param int  $solucionesIdsolucion
+     * @param int  $solucionesIdsoluciones
      * @param int  $usuariosId
      *
      * @throws \Doctrine\ORM\ORMException
      */
     public function __construct(
         bool $respuesta,
-        int $solucionesIdsolucion,
+        int $solucionesIdsoluciones,
         int $usuariosId
     ) {
         $this->idrespuestaSolucion = 0;
         $this->respuesta = $respuesta;
 
-        $this->solucionesIdsolucion = $solucionesIdsolucion;
+        $this->solucionesIdsoluciones = $solucionesIdsoluciones;
         $this->usuariosId = $usuariosId;
     }
      /**
@@ -85,7 +85,7 @@ class RespuestaSolucion implements \JsonSerializable
      * @return int
      */
     public function getIdSolucion(){
-        return $this->solucionesIdsolucion;
+        return $this->solucionesIdsoluciones;
     }
     /**
      * @return int
@@ -104,7 +104,7 @@ class RespuestaSolucion implements \JsonSerializable
         return '[ respuestaSolucion ' .
             '(idRespuestaSolucion=' . $this->getIdRespuestaSolucion() . ', ' .
             'respuesta=' . (int) $this->getRespuesta() . ', ' .
-            'solucionesIdsolucion=' . (int)$this->getIdSolucion() . ', ' .
+            'solucionesIdsoluciones=' . (int)$this->getIdSolucion() . ', ' .
 
             'usuariosId=' . (int)$this->getIdUsuario() . ', ' .
             ') ]';
@@ -123,7 +123,7 @@ class RespuestaSolucion implements \JsonSerializable
             'respuestaSolucion' => [
                 'idRespuestaSolucion' => $this->getIdRespuestaSolucion(),
                 'respuesta' => $this->getRespuesta(),
-                'solucionesIdsolucion' => $this->getIdRespuestaSolucion(),
+                'solucionesIdsoluciones' => $this->getIdSolucion(),
                 'usuariosId' => $this->getIdUsuario()
             ]
         ];
@@ -173,51 +173,7 @@ class RespuestaSolucion implements \JsonSerializable
  * )
  */
 
- /**
- * RespuestaSolucionData definition
- *
- * @OA\Schema(
- *     schema = "RespuestaSolucionData",
- *     type   = "object",
- *     required = { "descripcion","cuestionesIdcuestion"},
- *     
- *    
- *      @OA\Property(
- *          property    = "descripcion",
- *          description = "Respuesta solucion description",
- *          type        = "string"
- *      ),
- * @OA\Property(
- *          property    = "correcta",
- *          description = "Respuesta solucion correcta",
- *          type        = "boolean"
-
- *      ),
- *  *      @OA\Property(
- *          property    = "error",
- *          description = "Respuesta solucion error",
- *          type        = "string"
- *      ),
-
- * @OA\Property(
- *          property    = "cuestionesIdcuestion",
- *          description = "respuesta solucion parent solution",
- *          format      = "int64",
- *          type        = "integer"
- *      ),
- * 
- * )
- *      
- *      example = {
- *              
- *              "descripcion" = "Solution description",
- *              "correcta"  = true,
- *              "error" = "Corrección del maestro",
- *              "solucionesIdSolucion" = 5
- *          }
- *     
- * )
- */
+ 
 
  /**
  * RespuestaSolucion array definition

@@ -107,7 +107,7 @@ class RespuestaSolucionController
         //200 
         return $response
             ->withJson(
-                $respuestaSolucion,
+                ['respuestaSolucion' => $respuestaSolucion],
                 StatusCode::HTTP_OK // 200
             );
     }
