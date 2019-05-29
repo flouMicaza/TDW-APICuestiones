@@ -41,13 +41,20 @@ function cargar_cuestiones(cuestiones) {
 
   //crear la lista de cuestiones
   for (let cuestion of cuestiones) {
-    var nueva_cuestion = crear_cuestion(cuestion.cuestion, tipoUsuario);
-    main_cuestiones.appendChild(nueva_cuestion);
+    if((tipoUsuario=="aprendiz" && cuestion.disponible)|| tipoUsuario=="maestro"){
+      var nueva_cuestion = crear_cuestion(cuestion.cuestion, tipoUsuario);
+      main_cuestiones.appendChild(nueva_cuestion);
+    }
+    
   }
 
   //si es alumno elimino del dom el elemento para agregar cuestiones
   if (tipoUsuario == "aprendiz") {
-    $("#agregar_cuestion").remove();
+    if($("#cuestiones").children().length==0){
+
+    console.log("es aprendiz");
+      noHayCuestiones();
+    }
   }
 }
 
