@@ -1,8 +1,38 @@
+function irRegistrarUsuario(){
+  location.href = "registro.html";
+}
+function registrarUsuario(){
+  var nombre = $("#user").val();
+  var contrasena = $("#contrasena").val();
+  var email = $("#email").val();
+  
+  if(nombre=="" || contrasena=="" || email==""){
+    $("#registro").append("<small class='text-danger'>Todos los campos son obligatorios</small>")
+  }else{
+    $.ajax({
+      url: "http://localhost:8000/api/v1/users",
+      type: "POST",
+      data: {
+        username: nombre,
+        email : email,
+        password: contrasena,
+        enabled: false
+      },
+      success: function(data, textStatus) {
+        location.href = "login.html";
+      },
+      error: function(XMLHttpRequest, textStatus, errorThrown) {
+        console.log(errorThrown);
+      },
+      dataType: "json"
+    });
+  }
+}
 function inicioLogin() {
   $("#botonLogin").click(function() {
     var nombre = $("#user").val();
     var contrasena = $("#contrasena").val();
-    console.log("holaaa", nombre, " ", contrasena);
+   
     $.ajax({
       url: "http://localhost:8000/api/v1/login",
       type: "POST",
@@ -15,8 +45,13 @@ function inicioLogin() {
         localStorage.setItem("token", token);
         tokenInfo = parseJwt(localStorage.getItem("token"));
         console.log(tokenInfo);
+        if(tokenInfo.enabled){
+          
         localStorage.setItem("usuarioRegistrado", JSON.stringify(tokenInfo));
         location.href = "inicio.html";
+        }else{
+          location.href = "inicioDesactivado.html";
+        }
       },
       error: function(XMLHttpRequest, textStatus, errorThrown) {
         //errorThrown tira el error que devuelve la api

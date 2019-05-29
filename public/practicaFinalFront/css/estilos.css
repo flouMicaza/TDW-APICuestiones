@@ -25,6 +25,9 @@
 .btn {
   margin-right: 5px;
 }
+.boton-login {
+  margin: 2px;
+}
 .texto-destacado {
     background-color: whitesmoke;
     text-align: center;

@@ -20,7 +20,7 @@
   </head>
   <body onload="inicioLogin();">
     <div class="contenedor">
-      <h1>Iniciar sesión</h1>
+      <h1>Registro</h1>
       <!-- junbotron es un clase de bootstrap-->
       <div class="jumbotron">
         <form id="loginForm" action="login.html">
@@ -44,14 +44,22 @@
               placeholder="Contraseña"
             />
           </div>
-          <div id="div_input">
-            <input type="button" class="btn btn-primary boton-login" id="botonLogin" value="Iniciar sesión" />
-          </div>
+          <div class="form-group" id="div_email">
+                <label for="email">Email</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  required
+                  placeholder="Email"
+                />
+              </div>
           
+              <div id="registro" >
+                <input type="button" class="btn btn-primary boton-login" id="botonRegistro" value="Registrarse" onclick="registrarUsuario();" />
+            </div>
         </form>
-        <div id="registro" >
-            <input type="button" class="btn btn-primary boton-login" id="botonRegistro" value="Registrarse" onclick="irRegistrarUsuario();" />
-          </div>
+
       </div>
     </div>
   </body>
