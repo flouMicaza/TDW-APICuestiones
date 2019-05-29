@@ -173,7 +173,46 @@ class RespuestaSolucion implements \JsonSerializable
  * )
  */
 
- 
+ /**
+ * RespuestaSolucionData definition
+ *
+ * @OA\Schema(
+ *     schema = "RespuestaSolucionData",
+ *     type   = "object",
+ *     required = { "respuesta","solucionesIdsoluciones", "usuariosId"},
+ *     
+ *    
+
+ * @OA\Property(
+ *          property    = "respuesta",
+ *          description = "Propuesta solucion respuesta",
+ *          type        = "boolean"
+ *      ),
+ *
+ * @OA\Property(
+ *          property    = "solucionesIdsoluciones",
+ *          description = "respuesta solucion parent solution",
+ *          format      = "int64",
+ *          type        = "integer"
+ *      ),
+ *  * @OA\Property(
+ *          property    = "usuariosId",
+ *          description = "user who created respuesta solucion",
+ *          format      = "int64",
+ *          type        = "integer"
+ *      ),
+ * 
+ * )
+ *      
+ *      example = {
+ *              
+ *              "respuesta"  = true,
+ *              "solucionesIdSolucion" = 5,
+ *              "usuariosId = 5
+*          }
+ *     
+ * )
+ */
 
  /**
  * RespuestaSolucion array definition

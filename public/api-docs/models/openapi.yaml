@@ -405,6 +405,52 @@ paths:
       security:
         -
           TDWApiSecurity: []
+  /respuestasolucion:
+    post:
+      tags:
+        - RespuestaSolucion
+      summary: 'Creates a new respuesta de solucion'
+      description: 'Creates a new respuesta de solucion'
+      operationId: tdw_post_respuestaSolucion
+      requestBody:
+        description: '`respuestaSolucion` properties to add to the system'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RespuestaSolucionData'
+      responses:
+        '201':
+          description: '`Created`: respuestaSolucion created'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RespuestaSolucion'
+        '400':
+          description: '`Bad Request`:insert valid data'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+              example:
+                code: 400
+                message: '`Bad Request`: insert valid data'
+        '401':
+          $ref: '#/components/responses/401_Standard_Response'
+        '403':
+          $ref: '#/components/responses/403_Forbidden_Response'
+        '409':
+          description: '`Conflict`: solucionesIdsoluciones does not exist.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+              example:
+                code: 409
+                message: '`Conflict`: solucionesIdsoluciones does not exist.'
+      security:
+        -
+          TDWApiSecurity: []
   '/solutions/{questionId}':
     get:
       tags:
@@ -913,20 +959,19 @@ components:
       type: object
     RespuestaSolucionData:
       required:
-        - descripcion
-        - cuestionesIdcuestion
+        - respuesta
+        - solucionesIdsoluciones
+        - usuariosId
       properties:
-        descripcion:
-          description: 'Respuesta solucion description'
-          type: string
-        correcta:
-          description: 'Respuesta solucion correcta'
+        respuesta:
+          description: 'Propuesta solucion respuesta'
           type: boolean
-        error:
-          description: 'Respuesta solucion error'
-          type: string
-        cuestionesIdcuestion:
+        solucionesIdsoluciones:
           description: 'respuesta solucion parent solution'
+          type: integer
+          format: int64
+        usuariosId:
+          description: 'user who created respuesta solucion'
           type: integer
           format: int64
       type: object

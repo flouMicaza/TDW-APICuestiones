@@ -198,3 +198,8 @@ $app->get(
     $_ENV[RUTA_API]. RespuestaSolucionController::PATH_RESPUESTASOLUCION.'/{idu:[0-9]+}',
     RespuestaSolucionController::class . ':get'
 )->setName('tdw_get_respuestaSolucion');
+// POST: Creates a new question
+$app->post(
+    $_ENV['RUTA_API'] .RespuestaSolucionController::PATH_RESPUESTASOLUCION,
+    RespuestaSolucionController::class . ':post'
+)->setName('tdw_post_respuestaSolucion');
