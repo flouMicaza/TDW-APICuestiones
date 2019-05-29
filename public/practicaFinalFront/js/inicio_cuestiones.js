@@ -41,7 +41,7 @@ function cargar_cuestiones(cuestiones) {
 
   //crear la lista de cuestiones
   for (let cuestion of cuestiones) {
-    if((tipoUsuario=="aprendiz" && cuestion.disponible)|| tipoUsuario=="maestro"){
+    if((tipoUsuario=="aprendiz" && cuestion.cuestion.enunciadoDisponible)|| tipoUsuario=="maestro"){
       var nueva_cuestion = crear_cuestion(cuestion.cuestion, tipoUsuario);
       main_cuestiones.appendChild(nueva_cuestion);
     }
@@ -50,9 +50,9 @@ function cargar_cuestiones(cuestiones) {
 
   //si es alumno elimino del dom el elemento para agregar cuestiones
   if (tipoUsuario == "aprendiz") {
+    $("#agregar_cuestion").remove(); 
     if($("#cuestiones").children().length==0){
 
-    console.log("es aprendiz");
       noHayCuestiones();
     }
   }
@@ -158,7 +158,6 @@ function agregar_cuestion() {
     },
     data: data,
     success: function(data, textStatus) {
-      console.log(data);
       window.localStorage.setItem(
         "cuestion_actual",
         JSON.stringify(data.cuestion)
