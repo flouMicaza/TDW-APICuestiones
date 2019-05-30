@@ -24,8 +24,15 @@
   <body onload="get_cuestiones()">
     <nav class="navbar navbar-light navbar-expand-lg ">
       <a class="navbar-brand" href="#">Cuestiones</a>
-      <div class="collapse navbar-collapse justify-content-end">
+      <div class="collapse navbar-collapse justify-content-end"></div>
         <ul class="navbar-nav">
+          <li class="nav-item active">
+            <a class="nav-link" href="usuarios.html">Usuarios <span class="sr-only">(current)</span></a>
+          </li>
+
+          <li class="nav-item active">
+              <a class="nav-link" href="inicio.html">Cuestiones </a>
+              </li>
           <li class="nav-item">
             <a id= "nombre-usuario" class="nav-link disabled"  tabindex="-1" aria-disabled="true">Nombre usuario: </a>
           </li>
@@ -47,9 +54,7 @@
     </nav>
 
     <div class="contenedor-cuestiones container" id="container">
-      <!-- <span class="delete-btn">
-        <a href="login.html" class="btn btn-dark btn-sm">Salir</a>
-      </span> -->
+     
       <h3>Cuestiones</h3>
       <main id="cuestiones"></main>
       <div class="card" id="agregar_cuestion">

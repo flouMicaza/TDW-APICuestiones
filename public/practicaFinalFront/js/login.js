@@ -10,13 +10,13 @@ function registrarUsuario(){
     $("#registro").append("<small class='text-danger'>Todos los campos son obligatorios</small>")
   }else{
     $.ajax({
-      url: "http://localhost:8000/api/v1/users",
+      url: "http://localhost:8000/api/v1/users/add",
       type: "POST",
       data: {
         username: nombre,
         email : email,
         password: contrasena,
-        enabled: false
+        enabled: 0
       },
       success: function(data, textStatus) {
         location.href = "login.html";
