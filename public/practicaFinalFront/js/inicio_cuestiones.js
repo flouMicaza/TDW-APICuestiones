@@ -30,6 +30,8 @@ function noHayCuestiones() {
   var tipoUsuario = usuarioActual.isMaestro ? "maestro" : "aprendiz";
   if (tipoUsuario == "aprendiz") {
     $("#agregar_cuestion").remove();
+    
+    $("#menu_usuarios").remove();
   }
   $("#cuestiones").html(
     "<div class='card'><div class='card-body'><p class='card-text'>No hay cuestiones disponibles</p></div></div>"
@@ -56,6 +58,8 @@ function cargar_cuestiones(cuestiones) {
   //si es alumno elimino del dom el elemento para agregar cuestiones
   if (tipoUsuario == "aprendiz") {
     $("#agregar_cuestion").remove(); 
+
+    $("#menu_usuarios").remove();
     if($("#cuestiones").children().length==0){
 
       noHayCuestiones();
