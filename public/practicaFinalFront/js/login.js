@@ -22,7 +22,9 @@ function registrarUsuario(){
         location.href = "login.html";
       },
       error: function(XMLHttpRequest, textStatus, errorThrown) {
-        console.log(errorThrown);
+        if(errorThrown=="Bad Request"){
+          $("#registro").append("<small class='text-danger'>El usuario ingresado ya existe</small>")
+        }
       },
       dataType: "json"
     });
