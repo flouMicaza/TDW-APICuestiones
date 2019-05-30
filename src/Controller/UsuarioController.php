@@ -351,7 +351,7 @@ class UsuarioController
      * Summary: Creates a new user
      *
      * @OA\Post(
-     *     path        = "/users",
+     *     path        = "/users/add",
      *     tags        = { "Users" },
      *     summary     = "Creates a new user",
      *     description = "Creates a new user",

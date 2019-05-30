@@ -78,7 +78,7 @@ $app->options(
 
 // POST: Creates a new user
 $app->post(
-    $_ENV['RUTA_API'] . UsuarioController::PATH_USUARIOS,
+    $_ENV['RUTA_API'] . UsuarioController::PATH_USUARIOS.'/add',
     UsuarioController::class . ':post'
 )->setName('tdw_post_users');
 

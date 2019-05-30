@@ -82,7 +82,7 @@ $app->add(
                 ),
                 new JwtAuthentication\RequestPathRule(
                     [
-                        'passthrough' => ["/api/v1/users"]
+                        'passthrough' => ["/api/v1/users/add"]
                     ]
                 )
             ],

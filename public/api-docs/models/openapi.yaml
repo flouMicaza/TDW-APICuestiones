@@ -640,51 +640,6 @@ paths:
       security:
         -
           TDWApiSecurity: []
-    post:
-      tags:
-        - Users
-      summary: 'Creates a new user'
-      description: 'Creates a new user'
-      operationId: tdw_post_users
-      requestBody:
-        description: '`User` properties to add to the system'
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserData'
-      responses:
-        '201':
-          description: '`Created`: user created'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-        '400':
-          description: '`Bad Request`: insert valid data'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Message'
-              example:
-                code: 400
-                message: '`Bad Request`: insert valid data'
-        '401':
-          $ref: '#/components/responses/401_Standard_Response'
-        '403':
-          $ref: '#/components/responses/403_Forbidden_Response'
-        '422':
-          description: '`Unprocessable entity`: username, e-mail or password is left out'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Message'
-              example:
-                code: 422
-                message: '`Unprocessable entity`: username, e-mail or password is left out'
-      security:
-        -
-          TDWApiSecurity: []
     options:
       tags:
         - Users
@@ -819,6 +774,52 @@ paths:
           description: 'Username exists &lt;Response body is empty&gt;'
         '404':
           $ref: '#/components/responses/404_Resource_Not_Found_Response'
+      security:
+        -
+          TDWApiSecurity: []
+  /users/add:
+    post:
+      tags:
+        - Users
+      summary: 'Creates a new user'
+      description: 'Creates a new user'
+      operationId: tdw_post_users
+      requestBody:
+        description: '`User` properties to add to the system'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserData'
+      responses:
+        '201':
+          description: '`Created`: user created'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: '`Bad Request`: insert valid data'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+              example:
+                code: 400
+                message: '`Bad Request`: insert valid data'
+        '401':
+          $ref: '#/components/responses/401_Standard_Response'
+        '403':
+          $ref: '#/components/responses/403_Forbidden_Response'
+        '422':
+          description: '`Unprocessable entity`: username, e-mail or password is left out'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+              example:
+                code: 422
+                message: '`Unprocessable entity`: username, e-mail or password is left out'
       security:
         -
           TDWApiSecurity: []
