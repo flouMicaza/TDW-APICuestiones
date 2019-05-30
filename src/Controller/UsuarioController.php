@@ -434,7 +434,6 @@ class UsuarioController
         if (count($usuario)) {    // HTTP_BAD_REQUEST 400: insert valid data
             return Error::error($this->container, $request, $response, StatusCode::HTTP_BAD_REQUEST);
         }
-
         // 201
         $usuario = new Usuario(
             $req_data['username'],

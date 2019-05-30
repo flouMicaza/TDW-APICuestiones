@@ -153,7 +153,7 @@ class Usuario implements \JsonSerializable
         string $username = '',
         string $email = '',
         string $password = '',
-        bool   $enabled = true,
+        bool   $enabled,
         bool   $isMaestro = false,
         bool   $isAdmin = false
     ) {
