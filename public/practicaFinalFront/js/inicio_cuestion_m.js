@@ -48,8 +48,6 @@ function cargar_soluciones(idCuestion) {
     // Fetch the stored token from localStorage and set in the header
     headers: { Authorization: "Bearer " + localStorage.getItem("token") },
     success: function(data, textStatus) {
-      //TODO: lo que dice el alert
-
       for (let solucion of data.soluciones) {
         solucion = solucion.soluciones;
 
@@ -130,7 +128,6 @@ function crear_enunciado_cuestion(cuestion_actual) {
   input_nombre.id = "input_nombre";
   return input_nombre;
 }
-//TODO: en cambio_estado_solucion arreglar para que use ajax
 function crear_switch(solucion) {
   var div_switch = document.createElement("div");
   div_switch.className = "custom_control custom-switch";
@@ -189,7 +186,6 @@ function corregir_propuesta(elemento){
       }
     }
   });
-  console.log(elemento.id.split("_").pop(),"thiiis");
 }
 
 function quitar_propuesta(propuesta){
@@ -211,7 +207,6 @@ function crear_botones_solucion(solucion) {
   var boton_eliminar = document.createElement("button");
   boton_eliminar.className = "btn btn-danger ";
   boton_eliminar.type = "button";
-  console.log("solucion", solucion);
   boton_eliminar.id = "eliminar_" + solucion.idSoluciones;
   var texto2 = document.createTextNode("Eliminar solución");
   boton_eliminar.appendChild(texto2);
@@ -263,7 +258,6 @@ function agregar_solucion() {
 }
 function eliminar_solucion() {
   var id_sol = this.id[10] != undefined ? this.id[9] + this.id[10] : this.id[9];
-  console.log("eliminar", this.id);
   $.ajax({
     url: "/api/v1/solutions/" + id_sol,
     type: "DELETE",
@@ -281,14 +275,11 @@ function eliminar_solucion() {
   });
 }
 
-//TODO: hacer esta funcion con el ajax
 function editar_solucion() {
   var id_solucion =
     this.id[6] != undefined ? this.id[5] + this.id[6] : this.id[5];
-  console.log("se edita", this);
   var enunciado_sol = $("#textarea_" + id_solucion).val();
   if (enunciado_sol == "") {
-    console.log("gola");
     $("#mensaje_sol_vacia" + id_solucion).css("display", "");
     return;
   }
@@ -320,7 +311,6 @@ function cambio_estado_solucion() {
   var id_solucion =
     this.id[8] != undefined ? this.id[7] + this.id[8] : this.id[7];
 
-  console.log(id_solucion, "cambio de estado");
   var correcta = this.checked ? 1 : 0;
   $.ajax({
     url: "/api/v1/solutions/" + id_solucion,
@@ -345,7 +335,6 @@ function cambio_enunciado() {
   var cuestion_actual = JSON.parse(
     window.localStorage.getItem("cuestion_actual")
   );
-  console.log(cuestion_actual);
   var nuevo_enunciado = window.document.getElementById("input_nombre").value;
 
   $.ajax({

@@ -184,6 +184,10 @@ $app->get(
     $_ENV['RUTA_API']. PropuestaSolucionController::PATH_PROPUESTASOLUCION.'/{id:[0-9]+}',
     PropuestaSolucionController::class . ':propuestasget'
 )->setName('tdw_propuestasget_propuestaSolucion');
+$app->get(
+    $_ENV['RUTA_API']. PropuestaSolucionController::PATH_PROPUESTASOLUCION.'/cantidad/{id:[0-9]+}',
+    PropuestaSolucionController::class . ':cantpropuestasget'
+)->setName('tdw_cantpropuestasget_propuestaSolucion');
 $app->put(
     $_ENV['RUTA_API']. PropuestaSolucionController::PATH_PROPUESTASOLUCION.'/{id:[0-9]+}',
     PropuestaSolucionController::class . ':put'

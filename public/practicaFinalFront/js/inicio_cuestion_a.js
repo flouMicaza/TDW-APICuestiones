@@ -129,10 +129,7 @@ $.ajax({
         //crear_html_solucion(soluciones,respondidas)
       },
       error: function(XMLHttpRequest, textStatus, errorThrown) {
-        if(errorThrown!="Not Found"){
-
-          alert("hubo un error importando soluciones");
-        }
+        
       },
       dataType: "json"
     });
@@ -147,11 +144,10 @@ $.ajax({
         // Fetch the stored token from localStorage and set in the header
         headers: { Authorization: "Bearer " + localStorage.getItem("token") },
         success: function(soluciones, textStatus) {
-          console.log(soluciones.soluciones[0],"soluciones");
           crear_html_solucion(soluciones.soluciones[0]);
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
-          alert("hubo un error importando soluciones");
+          
         },
         dataType: "json"
       });
@@ -276,7 +272,6 @@ function crear_html_solucion_respondida(solucion,respondida_respuesta){
 function crear_html_solucion(solucion) {
   solucion = solucion.soluciones;
 
-  console.log("sssssoolcuion", solucion);
   var main_soluciones = document.getElementById("soluciones_main");
 
   var form_solucion = document.createElement("form");

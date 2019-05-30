@@ -305,3 +305,24 @@ class PropuestaSolucion implements \JsonSerializable
  *     )
  * )
  */
+
+ /**
+ *CantidadPropuestaSolucion definition
+ *
+ * @OA\Schema(
+ *     schema = "CantidadPropuestaSolucion",
+ *     type   = "object",
+ *     
+ *     @OA\Property(
+ *          property    = "cantidadPropuestas",
+ *          description = "Cantidad Propuesta solucion pendientes",
+ *          type        = "integer"
+ *      ),
+
+ *      
+ *      example = {
+ *              "cantidadPropuestas" = 3
+ *          }
+ *     
+ * )
+ */

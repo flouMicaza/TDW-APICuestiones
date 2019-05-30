@@ -46,7 +46,6 @@ function inicioLogin() {
         var token = data["token"];
         localStorage.setItem("token", token);
         tokenInfo = parseJwt(localStorage.getItem("token"));
-        console.log(tokenInfo);
         if(tokenInfo.enabled){
           
         localStorage.setItem("usuarioRegistrado", JSON.stringify(tokenInfo));

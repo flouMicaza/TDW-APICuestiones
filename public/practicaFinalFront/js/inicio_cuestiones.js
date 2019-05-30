@@ -106,14 +106,18 @@ function crear_cuestion(cuestion, tipo) {
 
   var card_body = document.createElement("div");
   card_body.className = "card-body";
-
+  card_body.id = "card-body" + cuestion.idCuestion;
   let link_cuestion = crear_link_cuestion(cuestion, tipo);
   card_body.appendChild(link_cuestion);
 
   //esto es solo si es un maestro.
   if (tipo == "maestro") {
+    var span_cantidad;
+    crear_span_cantidad(cuestion);
+
     var span_eliminar = crear_boton_eliminar(cuestion);
     card_body.appendChild(span_eliminar);
+
   }
 
   card_div.appendChild(card_body);
@@ -121,6 +125,25 @@ function crear_cuestion(cuestion, tipo) {
   return card_div;
 }
 
+function crear_span_cantidad(cuestion){
+  $.ajax({
+    url: "/api/v1/propuestasolucion/cantidad/" + cuestion.idCuestion,
+    type: "GET",
+    // Fetch the stored token from localStorage and set in the header
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("token")
+    },
+    success: function(data, textStatus) {
+      var span_cantidad = document.createElement("span");
+      span_cantidad.innerHTML = '<span class="badge badge-pill badge-primary delete-btn">' + data + '</span>';
+      $("#card-body" + cuestion.idCuestion).append(span_cantidad);
+    },
+    error: function(XMLHttpRequest, textStatus, errorThrown) {
+      alert("Fail eliminacion!", errorThrown);
+    },
+    dataType: "json"
+  });
+}
 //eliminar_cuestion: funcion que eliminar una cuestion completa del localStorage.
 //Se edita el json y se vuelve a setear.
 function eliminar_cuestion() {
@@ -145,7 +168,6 @@ function eliminar_cuestion() {
   });
 }
 
-//TODO: arreglar esto y lo del CORS mierda
 function agregar_cuestion() {
   var nombre = $("#id_nueva_cuestion").val();
   //agregar la cuestion a la base de datos

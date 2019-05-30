@@ -346,6 +346,34 @@ paths:
       security:
         -
           TDWApiSecurity: []
+  '/propuestasolucion/cantidad/{questionId}':
+    get:
+      tags:
+        - PropuestaSolucion
+      summary: 'Retorna la cantidad de propuestaSolucion que no han sido corregidas'
+      description: 'Returns the array of propuestaSolucion identified by `questionId`.'
+      operationId: tdw_cantpropuestasget_propuestaSolucion
+      parameters:
+        -
+          $ref: '#/components/parameters/questionId'
+        -
+          $ref: '#/components/parameters/questionId'
+      responses:
+        '200':
+          description: 'Cantidad propuestas pendientes '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CantidadPropuestaSolucion'
+        '401':
+          $ref: '#/components/responses/401_Standard_Response'
+        '403':
+          $ref: '#/components/responses/403_Forbidden_Response'
+        '404':
+          $ref: '#/components/responses/404_Resource_Not_Found_Response'
+      security:
+        -
+          TDWApiSecurity: []
   '/propuestasolucion/{propuestaSolucionId}':
     put:
       tags:
@@ -937,6 +965,14 @@ components:
           items:
             $ref: '#/components/schemas/PropuestaSolucion'
       type: object
+    CantidadPropuestaSolucion:
+      properties:
+        cantidadPropuestas:
+          description: 'Cantidad Propuesta solucion pendientes'
+          type: integer
+      type: object
+      example:
+        cantidadPropuestas: 3
     RespuestaSolucion:
       required:
         - descripcion

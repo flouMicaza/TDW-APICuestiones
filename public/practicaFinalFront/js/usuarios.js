@@ -14,7 +14,6 @@ function cargar_usuarios(){
         type: "GET",
         headers: { Authorization: "Bearer " + localStorage.getItem("token") },
         success: function(data, textStatus) {
-          console.log(data,"usuarios");
           mostrar_usuarios(data.usuarios);
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -25,7 +24,7 @@ function cargar_usuarios(){
 }
 function activar_usuario(id_user){
     var checked = $("#usuario_" + id_user).find("#activar_usuario").is(':checked');
-    console.log(checked,"checked")
+   
     $.ajax({
         url: "/api/v1/users/" + id_user,
         type: "PUT",
@@ -35,7 +34,6 @@ function activar_usuario(id_user){
         // Fetch the stored token from localStorage and set in the header
         headers: { Authorization: "Bearer " + localStorage.getItem("token") },
         success: function(data, textStatus) {
-          console.log("activado!")
     
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
