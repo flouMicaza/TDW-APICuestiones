@@ -44,6 +44,9 @@ $ php -S 127.0.0.1:8000 -t public
 ```
 Y realizar una petición con el navegador a la dirección [http://localhost:8000/][lh]
 
+## Datos de prueba: 
+Al ejecutar composer install la base de datos se poblará con algunos datos de prueba. Para el login existe el usuario admin con contraseña admin. Además existen 3 aprendices con nombre de usuario a , b  y c, y contraseña a, b y c, respectivamente. 
+
 ## Estructura del proyecto:
 
 A continuación se describe el contenido y estructura del proyecto:
