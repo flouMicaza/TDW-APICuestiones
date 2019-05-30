@@ -56,7 +56,27 @@ function mostrar_usuarios(lista_usuarios){
         $("#usuario_" + usuario.usuario.id).find("#email").text(usuario.usuario.email);
         $("#usuario_" + usuario.usuario.id).find("#activar_usuario").change(()=>activar_usuario(usuario.usuario.id));
         $("#usuario_" + usuario.usuario.id).find("#activar_usuario").attr('checked',usuario.usuario.enabled);
+        $("#usuario_" + usuario.usuario.id).find("#maestro_usuario").change(()=>maestro_usuario(usuario.usuario.id));
+        $("#usuario_" + usuario.usuario.id).find("#maestro_usuario").attr('checked',usuario.usuario.maestro);
         
     }
     $("#usuario_init").remove();
+}
+function maestro_usuario(id_user){
+    var checked = $("#usuario_" + id_user).find("#maestro_usuario").is(':checked');
+
+    $.ajax({
+        url: "/api/v1/users/" + id_user,
+        type: "PUT",
+        data: {
+          isMaestro : checked ? 1 : 0,
+          isAdmin : checked ? 1:0
+        },
+        // Fetch the stored token from localStorage and set in the header
+        headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+        
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+          
+        }
+      });
 }

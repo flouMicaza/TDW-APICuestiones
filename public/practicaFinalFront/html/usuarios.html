@@ -57,17 +57,24 @@
             <div class="card" id="usuario_init">
               <div class="card-body">
                 <div class="row">
-                  <div class="col">
+                  <div class="col-3">
                     <p id="nombre" class="card-text">Nombre usuario</p>
                   </div>
-                  <div class="col" id="email">
+                  <div class="col-3" id="email">
                       <p class="card-text">flo@dosidf.cl</p>
                   </div>
                   <div class="col">
-                      <input class="form-check-input" onchange="activar_usuario();" type="checkbox" value="" id="activar_usuario">
+                      <input class="form-check-input"  type="checkbox" value="" id="activar_usuario">
                       <label class="form-check-label" for="activar_usuario">
                         Activar Usuario
                       </label>
+                      <br>
+                      <input class="form-check-input"  type="checkbox" value="" id="maestro_usuario">
+                      <label class="form-check-label" for="maestro_usuario">
+                        Es maestro
+                      </label>
+                  </div>
+                  <div class="col">
                       <button class="btn btn-primary">Editar</button>
                     <button class="btn btn-danger">Eliminar</button>
                   </div>
